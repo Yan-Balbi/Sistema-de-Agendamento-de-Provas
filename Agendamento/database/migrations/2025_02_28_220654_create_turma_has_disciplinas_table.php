@@ -15,8 +15,6 @@ return new class extends Migration
             // $table->id();
             $table->unsignedBigInteger('turma_id');
             $table->unsignedBigInteger('disciplina_id');
-            $table->foreign('turma_id')->references('id')->on('turmas')->onDelete('cascade');
-            $table->foreign('disciplina_id')->references('id')->on('disciplinas')->onDelete('cascade');
         });
     }
 
