@@ -74,9 +74,12 @@
         <div class="btn-login-container">
             @if (Route::has('login'))
                 @auth
-                    <a href="{{ url('/dashboard') }}" class="btn-login">
-                        Dashboard
-                    </a>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="btn-login">
+                            Logout
+                        </button>
+                    </form>
                 @else
                     <a href="{{ route('login') }}" class="btn-login">
                         Log in
