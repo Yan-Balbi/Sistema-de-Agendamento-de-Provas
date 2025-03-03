@@ -4,7 +4,7 @@ use App\Http\Controllers\SalaController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('header');
+    return view('index');
 });
 
 Route::get('/cadastro/sala', [SalaController::class, 'create'])->name('salas.create');
