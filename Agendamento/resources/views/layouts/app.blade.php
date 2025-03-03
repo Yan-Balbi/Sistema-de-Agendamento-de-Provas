@@ -32,7 +32,7 @@
 
     <div class="min-h-screen bg-gray-100">
         <header>
-        @include('layouts.navbar')
+            @include('layouts.navbar')
         </header>
 
         <!-- Page Content -->

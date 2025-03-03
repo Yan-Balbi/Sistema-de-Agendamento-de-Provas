@@ -13,7 +13,7 @@ class SalaController extends Controller
     public function index()
     {
         $salas = Sala::all();
-        return view('sala-index', compact('salas'));
+        return view('salas.sala-index', compact('salas'));
     }
 
     /**
@@ -21,7 +21,7 @@ class SalaController extends Controller
      */
     public function create()
     {
-        return View('sala-form');
+        return View('salas.sala-form');
     }
 
     /**
