@@ -1,5 +1,6 @@
-@include('header')
+@extends('layouts.app')
 
+@section('content')
 <h2>Lista de Salas</h2>
 
 @if(session('success'))
@@ -12,4 +13,4 @@
     @endforeach
 </ul>
 
-@include('footer')
+@endsection
