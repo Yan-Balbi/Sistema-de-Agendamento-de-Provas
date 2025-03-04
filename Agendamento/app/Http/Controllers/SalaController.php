@@ -12,7 +12,7 @@ class SalaController extends Controller
      */
     public function index()
     {
-        $salas = Sala::all();
+        $salas = Sala::paginate(5);
         return view('salas.sala-index', compact('salas'));
     }
 

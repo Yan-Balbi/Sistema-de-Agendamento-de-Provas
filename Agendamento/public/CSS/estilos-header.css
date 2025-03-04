@@ -56,7 +56,7 @@ nav {
     position: relative;
 }
 
-.navbar-link {
+.nav-links a {
     color: white;
     text-decoration: none;
     font-size: 18px;
@@ -65,27 +65,9 @@ nav {
     transition: color 0.3s ease-in-out, transform 0.2s;
 }
 
-/* Estiliza os links dentro do dropdown como botões */
-.dropdown-menu a {
-    display: block; /* Ocupa a largura total */
-    padding: 10px 15px; /* Aumenta a área clicável */
-    margin: 5px 0; /* Adiciona espaçamento entre os itens */
-    text-align: left; /* Alinha o texto à esquerda */
-    text-decoration: none; /* Remove o sublinhado */
-    font-weight: 500; /* Torna o texto mais visível */
-    border-radius: 5px; /* Borda arredondada */
-    transition: background-color 0.3s ease-in-out;
-}
-
-/* Cor padrão para os botões dentro do dropdown */
-.dropdown-menu a {
-    background-color: #ffffff; /* Azul padrão do Bootstrap */
-    color: rgb(0, 0, 0);
-}
-
 .nav-links a:hover {
     color: #f4c542;
-    transform: scale(1.05);
+    transform: scale(1.1);
 }
 
 .dropdown-menu {

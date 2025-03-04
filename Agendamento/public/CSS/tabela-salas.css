@@ -1,0 +1,27 @@
+.btn {
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn.visualizar {
+    background-color: #0a9826;
+    color: white;
+}
+
+.btn.visualizar:hover {
+    background-color: #0d6c20;
+}
+
+.btn.apagar {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.btn.apagar:hover {
+    background-color: #c0392b;
+}

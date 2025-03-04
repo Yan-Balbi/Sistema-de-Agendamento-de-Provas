@@ -1,0 +1,95 @@
+/* Estilização da barra de paginação */
+.nav-paginacao {
+    /* display: flex; */
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #f8f9fa;
+    border-top: 2px solid #ddd;
+    font-family: Arial, sans-serif;
+
+    /* Fixa a barra no canto inferior esquerdo */
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 9999;
+}
+
+/* Contêiner de navegação */
+.nav-paginacao div {
+    display: flex;
+    align-items: center;
+}
+
+/* Lista de paginação */
+.nav-paginacao ul {
+    list-style: none;
+    display: flex;
+    gap: 8px;
+    padding: 0;
+    margin: 0;
+}
+
+/* Itens da paginação */
+.nav-paginacao li {
+    display: inline-block;
+    /* padding: 8px 12px; */
+    border-radius: 5px;
+    background-color: #e9ecef;
+    color: #333;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+/* Links da paginação */
+.nav-paginacao a {
+    border-radius: 5px;
+    display: block;
+    text-decoration: none;
+    color: #0d6c20;
+    font-weight: bold;
+    /* background-color: red; */
+    padding: 8px 12px;
+}
+
+/* Página atual */
+.nav-paginacao li[aria-current="page"] {
+    background-color: #0d6c20;
+    color: white;
+    padding: 8px 12px;
+}
+
+/* Hover nos itens */
+.nav-paginacao li:hover {
+    background-color: #0d6c20;
+    color: white;
+}
+
+/* Desativados */
+.nav-paginacao li[aria-disabled="true"] {
+    text-align: center;
+    opacity: 0.5;
+    cursor: default;
+    background-color: #ccc;
+    color: #666;
+    /* background-color: blue; */
+    padding: 8px 12px;
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+    .nav-paginacao {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .nav-paginacao ul {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
