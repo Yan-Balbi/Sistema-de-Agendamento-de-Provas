@@ -10,17 +10,17 @@
     }
 </script>
 
-@if(session('success'))
-    <p style="color: green;">{{ session('success') }}</p>
-@endif
-@if(session('danger'))
-    <p style="color: red;">{{ session('danger') }}</p>
-@endif
 <head>
     <link rel="stylesheet" href="{{ asset('CSS/tabela-salas.css') }}" />
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 p-6">
+<div class="bg-gray-100 p-6">
+    @if(session('success'))
+        <p style="color: green;">{{ session('success') }}</p>
+    @endif
+    @if(session('danger'))
+        <p class="bg-red-100 border-l-4 border-red-500 text-black-700 p-4 mb-4 rounded-lg">{{ session('danger') }}</p>
+    @endif
     <div class="max-w-5xl mx-auto bg-white shadow-md rounded-lg p-6 mt-5">
         <h2 class="text-xl font-semibold text-gray-800 mb-4">Lista de Salas</h2>
         <table class="w-full border-collapse">
@@ -61,4 +61,4 @@
     </nav>
 </tbody>
 @endsection
-</body>
+</div>

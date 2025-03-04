@@ -4,11 +4,11 @@
     <link rel="stylesheet" href="{{ asset('CSS/estilo-cadastro-sala.css') }}" />
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 p-6">
-    <div class="max-w-2xl mx-auto bg-white shadow-md rounded-lg p-6 mt-5">
-        @if (session('success'))
-            <p style="color: green;">{{ session('success') }}</p>
-        @endif
+<div class="bg-gray-100 p-6">
+    @if (session('success'))
+        <p class="bg-green-100 border-l-4 border-green-500 text-black-700 p-4 mb-4 rounded-lg">{{ session('success') }}</p>
+    @endif
+    <div class="max-w-2xl mx-auto bg-white shadow-md rounded-lg p-6 mt-10">
         <label class="text-xl font-semibold text-gray-800">Nome da sala</label>
         <form method="POST" action="{{ route('salas.store') }}" class="flex flex-col flex space-y-5">
             @csrf
@@ -20,5 +20,5 @@
             </div>
         </form>
     </div>
-</body>
+</div>
 @endsection
