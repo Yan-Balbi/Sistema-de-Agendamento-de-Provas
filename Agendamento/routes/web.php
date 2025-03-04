@@ -13,6 +13,10 @@ Route::post('/cadastro/sala', [SalaController::class, 'store'])->name('salas.sto
 
 Route::get('/listagem/salas', [SalaController::class, 'index'])->name('salas.index');
 
+Route::get('/sala/{id}', [SalaController::class, 'edit'])->name('salas.edit');
+
+Route::put('/sala/{id}', [SalaController::class, 'update'])->name('salas.update');
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),

@@ -2,6 +2,13 @@
 </style>
 @section('content')
 
+<script>
+    function getById(button) {
+        var id = button.getAttribute("data-id");
+        console.log("ID da sala: " + id);
+        window.location.href = "{{ route('salas.edit', '') }}" + "/" + id;
+    }
+</script>
 
 @if(session('success'))
     <p style="color: green;">{{ session('success') }}</p>
@@ -26,7 +33,7 @@
 
                     <td class="p-3 text-green-600">{{ $sala->nome }}</td>
                     <td class="p-3">
-                        <button class="btn visualizar"> Visualizar </button>
+                    <button class="btn visualizar" data-id="{{ $sala->id }}" onclick="getById(this)"> Visualizar </button>
                         <button class="btn apagar"> Apagar </button>
                     </td>
 

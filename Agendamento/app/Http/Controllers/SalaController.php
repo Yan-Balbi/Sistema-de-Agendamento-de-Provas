@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Sala;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class SalaController extends Controller
 {
@@ -34,6 +36,12 @@ class SalaController extends Controller
         return redirect()->route('salas.create')->with('success','Sala adicionada!');
     }
 
+    public function getSalaById(Request $request){
+        $sala = DB::table('salas')->where('id', $request->id)->first();
+        // return response()->json($sala);
+        return View('salas.editar-sala', compact('sala'));
+    }
+
     /**
      * Display the specified resource.
      */
@@ -47,7 +55,9 @@ class SalaController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $sala = DB::table('salas')->where('id', /*$request->*/$id)->first();
+        // return response()->json($sala);
+        return View('salas.editar-sala', compact('sala'));
     }
 
     /**
@@ -55,7 +65,11 @@ class SalaController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $item = Sala::find($id);
+        $item->nome = $request->input('namee');
+        $item->save();
+        return redirect()->route('salas.edit', $id)->with('success', 'Sala atualizada com successo');
+
     }
 
     /**
