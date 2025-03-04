@@ -1,3 +1,9 @@
+.div-botoes{
+    display: flex;
+    gap: 5px;
+    width: 200;
+}
+
 .btn {
     padding: 8px 12px;
     font-size: 14px;

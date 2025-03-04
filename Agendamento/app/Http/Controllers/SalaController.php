@@ -14,7 +14,7 @@ class SalaController extends Controller
      */
     public function index()
     {
-        $salas = Sala::paginate(5);
+        $salas = Sala::paginate(7);
         return view('salas.sala-index', compact('salas'));
     }
 
@@ -31,8 +31,8 @@ class SalaController extends Controller
      */
     public function store(Request $request)
     {
-        $input = $request->all();
-        Sala::create($input);
+        $sala = $request->all();
+        Sala::create($sala);
         return redirect()->route('salas.create')->with('success','Sala adicionada!');
     }
 
@@ -65,9 +65,9 @@ class SalaController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $item = Sala::find($id);
-        $item->nome = $request->input('namee');
-        $item->save();
+        $sala = Sala::find($id);
+        $sala->nome = $request->input('namee');
+        $sala->save();
         return redirect()->route('salas.edit', $id)->with('success', 'Sala atualizada com successo');
 
     }
@@ -77,6 +77,9 @@ class SalaController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $sala = Sala::findOrFail($id);
+        $sala->delete();
+        // $sala = Sala::destroy($id);
+        return redirect()->route('salas.index', $id)->with('danger', 'Sala removida com successo');
     }
 }

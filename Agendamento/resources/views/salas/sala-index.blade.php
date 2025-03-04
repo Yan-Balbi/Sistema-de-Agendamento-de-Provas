@@ -13,12 +13,15 @@
 @if(session('success'))
     <p style="color: green;">{{ session('success') }}</p>
 @endif
+@if(session('danger'))
+    <p style="color: red;">{{ session('danger') }}</p>
+@endif
 <head>
     <link rel="stylesheet" href="{{ asset('CSS/tabela-salas.css') }}" />
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 p-6">
-    <div class="max-w-5xl mx-auto bg-white shadow-md rounded-lg p-6">
+    <div class="max-w-5xl mx-auto bg-white shadow-md rounded-lg p-6 mt-5">
         <h2 class="text-xl font-semibold text-gray-800 mb-4">Lista de Salas</h2>
         <table class="w-full border-collapse">
             <thead>
@@ -31,10 +34,17 @@
                 @foreach ($salas as $sala)
                 <tr class="bg-white border-b hover:bg-gray-100 transition">
 
-                    <td class="p-3 text-green-600">{{ $sala->nome }}</td>
+                    <td class="p-3 text-green-600 min-w-[600px]">{{ $sala->nome }}</td>
                     <td class="p-3">
-                    <button class="btn visualizar" data-id="{{ $sala->id }}" onclick="getById(this)"> Visualizar </button>
-                        <button class="btn apagar"> Apagar </button>
+                        <div class="div-botoes">
+                            <button class="btn visualizar" data-id="{{ $sala->id }}" onclick="getById(this)"> Visualizar </button>
+
+                            <form method="POST" action="{{ route('salas.destroy', $sala->id) }}">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn apagar" type="submit"> Apagar </button>
+                            </form>
+                        </div>
                     </td>
 
                 </tr>

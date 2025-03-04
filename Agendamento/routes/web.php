@@ -17,6 +17,8 @@ Route::get('/sala/{id}', [SalaController::class, 'edit'])->name('salas.edit');
 
 Route::put('/sala/{id}', [SalaController::class, 'update'])->name('salas.update');
 
+Route::delete('/sala/delete/{id}', [SalaController::class, 'destroy'])->name('salas.destroy');
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
