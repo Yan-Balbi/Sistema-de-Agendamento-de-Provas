@@ -27,6 +27,12 @@ php artisan migrate
 Inicialize o servidor de desenvolvimento:
 php artisan serve
 
+Executar o:
+npm install
+
+Executar:
+npm run dev
+
 Acesse a aplicção pela URL:
 http://127.0.0.1:8000/
 
