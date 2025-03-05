@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\SalaController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CursoController;
+use App\Http\Controllers\TurmaController;
 
 Route::get('/', function () {
     return view('index');
@@ -18,6 +20,10 @@ Route::get('/sala/{id}', [SalaController::class, 'edit'])->name('salas.edit');
 Route::put('/sala/{id}', [SalaController::class, 'update'])->name('salas.update');
 
 Route::delete('/sala/delete/{id}', [SalaController::class, 'destroy'])->name('salas.destroy');
+
+Route::resource('cursos', CursoController::class);
+
+Route::resource('turmas', TurmaController::class);
 
 Route::middleware([
     'auth:sanctum',

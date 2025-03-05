@@ -22,15 +22,7 @@ return new class extends Migration
             $table->foreign('curso_id')->references('id')->on('cursos')->onDelete('cascade');
         });
 
-        Schema::table('turma_has_disciplinas', function (Blueprint $table) {
-            $table->foreign('turma_id')->references('id')->on('turmas')->onDelete('cascade');
-            $table->foreign('disciplina_id')->references('id')->on('disciplinas')->onDelete('cascade');
-        });
 
-        Schema::table('professor_has_disciplinas', function (Blueprint $table) {
-            $table->foreign('professor_id')->references('id')->on('professors')->onDelete('cascade');
-            $table->foreign('disciplina_id')->references('id')->on('disciplinas')->onDelete('cascade');
-        });
     }
 
     /**

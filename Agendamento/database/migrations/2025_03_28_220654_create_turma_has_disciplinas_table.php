@@ -11,11 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('turma_has_disciplinas', function (Blueprint $table) {
-            // $table->id();
-            $table->unsignedBigInteger('turma_id');
-            $table->unsignedBigInteger('disciplina_id');
-        });
+       // Migração para 'turma_has_disciplinas'
+Schema::create('turma_has_disciplinas', function (Blueprint $table) {
+    $table->id();
+    $table->foreignId('turma_id')->constrained()->onDelete('cascade');
+    $table->foreignId('disciplina_id')->constrained()->onDelete('cascade');
+    $table->timestamps();
+});
+
     }
 
     /**

@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('professor_has_disciplinas', function (Blueprint $table) {
-            $table->unsignedBigInteger('professor_id');
-            $table->unsignedBigInteger('disciplina_id');
+        Schema::create('professor_turma', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('turma_id')->constrained()->onDelete('cascade');
+            $table->foreignId('professor_id')->constrained()->onDelete('cascade');
+            $table->timestamps();
         });
     }
 
@@ -22,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('professor_has_disciplinas');
+        Schema::dropIfExists('professor_turma');
     }
 };
