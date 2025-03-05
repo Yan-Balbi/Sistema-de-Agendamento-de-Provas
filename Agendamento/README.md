@@ -1,3 +1,44 @@
+
+Introdução ao Projeto Sistema de Agendamento de Provas
+
+instale o Larvel 11 em seu pc:
+https://dev.to/jsandaruwan/-installing-laravel-11-a-step-by-step-guide-2mkj
+
+Importe o projeto pelo VSCode com o link:
+https://github.com/Yan-Balbi/Sistema-de-Agendamento-de-Provas.git
+
+Acesse a pasta:
+cd Agendamento
+
+Execute o:
+composer install
+
+Configure o acesso ao BD MySQL no arquivo .env:
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=sistema_agendamento
+DB_USERNAME=root
+DB_PASSWORD=sua_senha
+
+Execute o migate para criar o BD:
+php artisan migrate
+
+Inicialize o servidor de desenvolvimento:
+php artisan serve
+
+Acesse a aplicção pela URL:
+http://127.0.0.1:8000/
+
+Cadastre um usuário como register:
+Acesse sua conta pelo login
+
+Dúvidas:
+Como acessar o ADM?
+Quem fará cada módulo?
+Qual o padrão de desenvolvimento?
+
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
