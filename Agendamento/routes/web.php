@@ -4,10 +4,24 @@ use App\Http\Controllers\SalaController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CursoController;
 use App\Http\Controllers\TurmaController;
+use App\Http\Controllers\ProfessorController;
 
 Route::get('/', function () {
     return view('index');
 });
+
+
+Route::get('/professor/cadastro', [ProfessorController::class, 'create'])->name('professor.create');
+
+Route::get('/professor/listar', [ProfessorController::class, 'listar'])->name('professor.listar');
+
+Route::post('/professor/cadastro', [ProfessorController::class, 'store'])->name('professor.store');
+
+Route::delete('/professor/delete/{id}', [ProfessorController::class, 'destroy'])->name('professor.destroy');
+
+Route::get('/professor/{id}', [ProfessorController::class, 'edit'])->name('professor.edit');
+
+Route::put('/professor/{id}', [ProfessorController::class, 'update'])->name('professor.update');
 
 Route::get('/cadastro/sala', [SalaController::class, 'create'])->name('salas.create');
 

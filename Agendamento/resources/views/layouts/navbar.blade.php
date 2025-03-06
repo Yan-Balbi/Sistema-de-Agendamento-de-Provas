@@ -13,8 +13,8 @@
                         Professores
                     </a>
                     <ul class="dropdown-menu p-2" aria-labelledby="professoresDropdown">
-                        <li><a class="btn btn-primary w-100 text-start" href="#">Cadastro</a></li>
-                        <li><a class="btn btn-secondary w-100 text-start mt-1" href="#">Listagem</a></li>
+                        <li><a class="btn btn-primary w-100 text-start" href="{{route('professor.create')}}">Cadastro</a></li>
+                        <li><a class="btn btn-secondary w-100 text-start mt-1" href="{{route('professor.listar')}}">Listagem</a></li>
                     </ul>
                 </li>
 

@@ -20,5 +20,5 @@ class Professor extends Model
         return $this->belongsToMany(Turma::class, 'professor_turma', 'professor_id', 'turma_id');
     }
 
-    public $timestamps = false;
+    public $timestamps = true;
 }
