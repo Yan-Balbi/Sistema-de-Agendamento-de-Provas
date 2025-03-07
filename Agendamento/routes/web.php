@@ -5,35 +5,21 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CursoController;
 use App\Http\Controllers\TurmaController;
 use App\Http\Controllers\ProfessorController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
     return view('index');
 });
 
+Route::prefix('/')->group(base_path('routes/professores.php'));
+Route::prefix('/')->group(base_path('routes/salas.php'));
 
-Route::get('/professor/cadastro', [ProfessorController::class, 'create'])->name('professor.create');
-
-Route::get('/professor/listar', [ProfessorController::class, 'listar'])->name('professor.listar');
-
-Route::post('/professor/cadastro', [ProfessorController::class, 'store'])->name('professor.store');
-
-Route::delete('/professor/delete/{id}', [ProfessorController::class, 'destroy'])->name('professor.destroy');
-
-Route::get('/professor/{id}', [ProfessorController::class, 'edit'])->name('professor.edit');
-
-Route::put('/professor/{id}', [ProfessorController::class, 'update'])->name('professor.update');
-
-Route::get('/cadastro/sala', [SalaController::class, 'create'])->name('salas.create');
-
-Route::post('/cadastro/sala', [SalaController::class, 'store'])->name('salas.store');
-
-Route::get('/listagem/salas', [SalaController::class, 'index'])->name('salas.index');
-
-Route::get('/sala/{id}', [SalaController::class, 'edit'])->name('salas.edit');
-
-Route::put('/sala/{id}', [SalaController::class, 'update'])->name('salas.update');
-
-Route::delete('/sala/delete/{id}', [SalaController::class, 'destroy'])->name('salas.destroy');
+Route::group(['middleware' => ['auth']], function() {
+    Route::resource('roles', RoleController::class);
+    Route::resource('users', UserController::class);
+});
 
 Route::resource('cursos', CursoController::class);
 

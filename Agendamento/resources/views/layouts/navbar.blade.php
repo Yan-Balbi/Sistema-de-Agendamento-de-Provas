@@ -5,7 +5,7 @@
         </div>
         <div class="div-nav-link">
             <ul class="nav-links">
-                <li><a class="navbar-link" href="inicio">Início</a></li>
+                <li><a class="navbar-link" href="/">Início</a></li>
 
                 <li class="nav-item dropdown">
                     <a class="navbar-link dropdown-toggle" href="#" id="professoresDropdown" role="button"
@@ -35,7 +35,7 @@
                         Cursos
                     </a>
                     <ul class="dropdown-menu p-2" aria-labelledby="cursosDropdown">
-                        <li><a class="btn btn-primary w-100 text-start" href="cursos/create">Cadastro</a></li>
+                        <li><a class="btn btn-primary w-100 text-start" href="{{ route('cursos.create') }}">Cadastro</a></li>
                         <li><a class="btn btn-secondary w-100 text-start mt-1" href="{{ route('cursos.index') }}">Listagem</a></li>
                     </ul>
                 </li>
@@ -46,7 +46,7 @@
                         Turmas
                     </a>
                     <ul class="dropdown-menu p-2" aria-labelledby="turmasDropdown">
-                        <li><a class="btn btn-primary w-100 text-start" href="turmas/create">Cadastro</a></li>
+                        <li><a class="btn btn-primary w-100 text-start" href="{{ route('turmas.create') }}">Cadastro</a></li>
                         <li><a class="btn btn-secondary w-100 text-start mt-1" href="{{ route('turmas.index') }}">Listagem</a></li>
                     </ul>
                 </li>
