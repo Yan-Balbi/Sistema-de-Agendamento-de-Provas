@@ -8,7 +8,7 @@
                 <li><a class="navbar-link" href="/">Início</a></li>
 
                 <li class="nav-item dropdown">
-                    <a class="navbar-link dropdown-toggle" href="#" id="professoresDropdown" role="button"
+                    <a class="navbar-link dropdown-toggle" href="{{route('professor.listar')}}" id="professoresDropdown" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
                         Professores
                     </a>

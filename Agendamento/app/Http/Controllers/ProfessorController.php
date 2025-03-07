@@ -11,11 +11,19 @@ class ProfessorController extends Controller
 {
     //
 
-    public function listar()
+    public function listar(Request $request)
     {
-        $professores = Professor::paginate(7);
-        return view('professores.professor-listar',compact('professores'));
+        $query = Professor::query();
+
+        if ($request->has('buscar')) {
+            $query->where('nome', 'LIKE', '%' . $request->input('buscar') . '%');
+        }
+
+        $professores = $query->paginate(7);
+
+        return view('professores.professor-listar', compact('professores'));
     }
+
 
     public function create(){
 

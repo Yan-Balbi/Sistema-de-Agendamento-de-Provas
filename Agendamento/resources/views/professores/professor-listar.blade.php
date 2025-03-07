@@ -33,6 +33,12 @@
     @endif
     <div class="max-w-5xl mx-auto bg-white shadow-md rounded-lg p-6 mt-5">
         <h2 class="text-xl font-semibold text-gray-800 mb-4">Lista de Professores</h2>
+        <form method="GET" action="{{ route('professor.listar') }}">
+            <input type="text" id="buscar" name="buscar" placeholder="Buscar Professor"
+                value="{{ request()->input('buscar') }}"
+                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-300 ease-in-out focus:outline-none">
+            <button type="submit" class="btn bg-blue-500 text-white px-4 py-2 rounded mt-2">Buscar</button>
+        </form> 
         <table class="w-full border-collapse">
             <thead>
                 <tr class="text-left text-gray-500 uppercase text-sm">
