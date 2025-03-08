@@ -13,8 +13,10 @@
                         Professores
                     </a>
                     <ul class="dropdown-menu p-2" aria-labelledby="professoresDropdown">
-                        <li><a class="btn btn-primary w-100 text-start" href="{{route('professor.create')}}">Cadastro</a></li>
-                        <li><a class="btn btn-secondary w-100 text-start mt-1" href="{{route('professor.listar')}}">Listagem</a></li>
+                        <li><a class="btn btn-primary w-100 text-start"
+                                href="{{ route('professor.create') }}">Cadastro</a></li>
+                        <li><a class="btn btn-secondary w-100 text-start mt-1"
+                                href="{{ route('professor.listar') }}">Listagem</a></li>
                     </ul>
                 </li>
 
@@ -35,8 +37,10 @@
                         Cursos
                     </a>
                     <ul class="dropdown-menu p-2" aria-labelledby="cursosDropdown">
-                        <li><a class="btn btn-primary w-100 text-start" href="{{ route('cursos.create') }}">Cadastro</a></li>
-                        <li><a class="btn btn-secondary w-100 text-start mt-1" href="{{ route('cursos.index') }}">Listagem</a></li>
+                        <li><a class="btn btn-primary w-100 text-start" href="{{ route('cursos.create') }}">Cadastro</a>
+                        </li>
+                        <li><a class="btn btn-secondary w-100 text-start mt-1"
+                                href="{{ route('cursos.index') }}">Listagem</a></li>
                     </ul>
                 </li>
 
@@ -46,8 +50,10 @@
                         Turmas
                     </a>
                     <ul class="dropdown-menu p-2" aria-labelledby="turmasDropdown">
-                        <li><a class="btn btn-primary w-100 text-start" href="{{ route('turmas.create') }}">Cadastro</a></li>
-                        <li><a class="btn btn-secondary w-100 text-start mt-1" href="{{ route('turmas.index') }}">Listagem</a></li>
+                        <li><a class="btn btn-primary w-100 text-start" href="{{ route('turmas.create') }}">Cadastro</a>
+                        </li>
+                        <li><a class="btn btn-secondary w-100 text-start mt-1"
+                                href="{{ route('turmas.index') }}">Listagem</a></li>
                     </ul>
                 </li>
 
@@ -67,6 +73,27 @@
                 <li class="nav-item">
                     <a class="navbar-link" href="{{ url('agendamento') }}">Agendamentos</a>
                 </li>
+
+                @can(['role-list', 'user-list'])
+                <li class="nav-item dropdown">
+                    <a class="navbar-link dropdown-toggle" href="#" id="adminDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        Administração
+                    </a>
+                    <ul class="dropdown-menu p-2" aria-labelledby="adminDropdown">
+                        @can('role-list')
+                        <li>
+                            <a class="btn btn-primary w-100 text-start" href="{{ route('roles.index') }}">Papéis</a>
+                        </li>
+                        @endcan
+                        @can('user-list')
+                        <li>
+                            <a class="btn btn-secondary w-100 text-start mt-1" href="{{ route('users.index') }}">Usuários</a>
+                        </li>
+                        @endcan
+                    </ul>
+                </li>
+                @endcan
 
 
             </ul>

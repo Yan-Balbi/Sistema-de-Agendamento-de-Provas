@@ -6,10 +6,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Permission;
-use DB;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Validator;
 
 class RoleController extends Controller
 {
@@ -18,13 +20,14 @@ class RoleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    function __construct()
-    {
-         $this->middleware('permission:role-list|role-create|role-edit|role-delete', ['only' => ['index','store']]);
-         $this->middleware('permission:role-create', ['only' => ['create','store']]);
-         $this->middleware('permission:role-edit', ['only' => ['edit','update']]);
-         $this->middleware('permission:role-delete', ['only' => ['destroy']]);
-    }
+    // public function __construct()
+    // {
+    //    $this->middleware('permission:role-list|role-create|role-edit|role-delete')->only(['index', 'store']);
+    //    $this->middleware('permission:role-create')->only(['create', 'store']);
+    //    $this->middleware('permission:role-edit')->only(['edit', 'update']);
+    //    $this->middleware('permission:role-delete')->only(['destroy']);
+    // }
+
 
     /**
      * Display a listing of the resource.
@@ -33,9 +36,10 @@ class RoleController extends Controller
      */
     public function index(Request $request): View
     {
-        $roles = Role::orderBy('id','DESC')->paginate(5);
-        return view('roles.index',compact('roles'))
-            ->with('i', ($request->input('page', 1) - 1) * 5);
+        $roles = Role::orderBy('id')->paginate(10);
+        $permissions = Permission::all(); // 🔹 Adicionado para carregar todas as permissões
+
+        return view('roles.index', compact('roles', 'permissions'));
     }
 
     /**
@@ -57,21 +61,27 @@ class RoleController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $this->validate($request, [
+        Validator::make($request->all(), [
             'name' => 'required|unique:roles,name',
-            'permission' => 'required',
+            'permission' => 'array',
+        ])->validate();
+
+        // Criar Role com o guard correto
+        $role = Role::create([
+            'name' => $request->input('name'),
+            'guard_name' => 'web', // Definir explicitamente o guard correto
         ]);
 
-        $permissionsID = array_map(
-            function($value) { return (int)$value; },
-            $request->input('permission')
-        );
+        // Buscar permissões pelo guard correto
+        $permissions = Permission::whereIn('id', array_map('intval', $request->input('permission', [])))
+            ->where('guard_name', 'web') // Filtrar pelo guard correto
+            ->get();
 
-        $role = Role::create(['name' => $request->input('name')]);
-        $role->syncPermissions($permissionsID);
+        // Associar Permissões
+        $role->syncPermissions($permissions);
 
         return redirect()->route('roles.index')
-                        ->with('success','Role created successfully');
+            ->with('success', 'Papel criado com sucesso');
     }
     /**
      * Display the specified resource.
@@ -115,25 +125,33 @@ class RoleController extends Controller
      */
     public function update(Request $request, $id): RedirectResponse
     {
-        $this->validate($request, [
+        // Validação correta
+        Validator::make($request->all(), [
             'name' => 'required',
-            'permission' => 'required',
+            'permission' => 'array',
+        ])->validate();
+
+        // Encontrar a Role
+        $role = Role::findOrFail($id);
+
+        // Atualizar nome da Role
+        $role->update([
+            'name' => $request->input('name'),
+            'guard_name' => 'web', // Garantir que está no guard correto
         ]);
 
-        $role = Role::find($id);
-        $role->name = $request->input('name');
-        $role->save();
+        // Buscar permissões pelo guard correto
+        $permissions = Permission::whereIn('id', array_map('intval', $request->input('permission', [])))
+            ->where('guard_name', 'web') // Filtrar pelo guard correto
+            ->get();
 
-        $permissionsID = array_map(
-            function($value) { return (int)$value; },
-            $request->input('permission')
-        );
-
-        $role->syncPermissions($permissionsID);
+        // Atualizar Permissões
+        $role->syncPermissions($permissions);
 
         return redirect()->route('roles.index')
-                        ->with('success','Role updated successfully');
+            ->with('success', 'Papel atualizado com sucesso');
     }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -142,8 +160,17 @@ class RoleController extends Controller
      */
     public function destroy($id): RedirectResponse
     {
-        DB::table("roles")->where('id',$id)->delete();
+        $role = Role::find($id);
+
+        if (!$role) {
+            return redirect()->route('roles.index')
+                ->with('error', 'Papel não encontrado');
+        }
+
+        $role->delete();
+
         return redirect()->route('roles.index')
-                        ->with('success','Role deleted successfully');
+            ->with('success', 'Papel deletado com sucesso');
     }
+
 }

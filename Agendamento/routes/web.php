@@ -16,10 +16,8 @@ Route::get('/', function () {
 Route::prefix('/')->group(base_path('routes/professores.php'));
 Route::prefix('/')->group(base_path('routes/salas.php'));
 
-Route::group(['middleware' => ['auth']], function() {
-    Route::resource('roles', RoleController::class);
-    Route::resource('users', UserController::class);
-});
+Route::prefix('/roles')->group(base_path('routes/roles.php'));
+Route::prefix('/users')->group(base_path('routes/users.php'));
 
 Route::resource('cursos', CursoController::class);
 

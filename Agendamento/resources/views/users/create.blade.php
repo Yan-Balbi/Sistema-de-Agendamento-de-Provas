@@ -46,12 +46,7 @@
             </div>
 
             <div>
-                <label for="confirm-password" class="block text-gray-700 font-medium">Confirmar Senha</label>
-                <input type="password" name="confirm-password" id="confirm-password" class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition" placeholder="Confirmar Senha" required>
-            </div>
-
-            <div>
-                <label for="roles" class="block text-gray-700 font-medium">Função</label>
+                <label for="roles" class="block text-gray-700 font-medium">Papél</label>
                 <select name="roles[]" id="roles" class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition" multiple required>
                     @foreach ($roles as $value => $label)
                         <option value="{{ $value }}">{{ $label }}</option>

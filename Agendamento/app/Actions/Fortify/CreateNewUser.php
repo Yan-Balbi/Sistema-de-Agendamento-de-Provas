@@ -29,11 +29,11 @@ class CreateNewUser implements CreatesNewUsers
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
         ])->validate();
 
-        return User::create([
+        return (User::create([
             'name' => $input['name'],
             'cpf' => preg_replace('/\D/', '', $input['cpf']),
             'email' => $input['email'],
             'password' => Hash::make($input['password']),
-        ]);
+        ]))->assignRole('Usuário Registrado');
     }
 }

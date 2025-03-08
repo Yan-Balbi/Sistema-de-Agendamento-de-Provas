@@ -2,18 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Fortify\PasswordValidationRules;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Spatie\Permission\Models\Role;
-use DB;
-use Hash;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Arr;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Validator;
+use Laravel\Jetstream\Jetstream;
+
+use App\Rules\CpfValidation;
+use Illuminate\Validation\Rule;
+use Laravel\Fortify\Contracts\CreatesNewUsers;
+
 
 class UserController extends Controller
 {
+    use PasswordValidationRules;
     /**
      * Display a listing of the resource.
      *
@@ -21,10 +30,10 @@ class UserController extends Controller
      */
     public function index(Request $request): View
     {
-        $data = User::latest()->paginate(5);
+        $data = User::paginate(10); // Obtém os usuários
+        $roles = Role::all(); // Obtém todas as roles
 
-        return view('users.index',compact('data'))
-            ->with('i', ($request->input('page', 1) - 1) * 5);
+        return view('users.index', compact('data', 'roles'));
     }
 
     /**
@@ -34,9 +43,9 @@ class UserController extends Controller
      */
     public function create(): View
     {
-        $roles = Role::pluck('name','name')->all();
+        $roles = Role::pluck('name', 'name')->all();
 
-        return view('users.create',compact('roles'));
+        return view('users.create', compact('roles'), ['mode' => 'createadmin']);
     }
 
     /**
@@ -47,22 +56,31 @@ class UserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $this->validate($request, [
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|same:confirm-password',
-            'roles' => 'required'
+        // dd($request->all());
+        // Validação correta
+        Validator::make($request->all(), [
+            'name' => ['required', 'string', 'max:255'],
+            'cpf' => ['required', 'string', 'max:18', Rule::unique('users'), new CpfValidation()],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['sometimes', 'nullable', 'min:8'],
+            'roles' => 'required|array',
+            'roles.*' => 'exists:roles,name',
+        ])->validate();
+
+        // Criar Usuário
+        $user = User::create([
+            'name' => $request->input('name'),
+            'cpf' => preg_replace('/\D/', '', $request->input('cpf')),
+            'email' => $request->input('email'),
+            'password' => Hash::make($request->input('password')),
         ]);
 
-        $input = $request->all();
-        $input['password'] = Hash::make($input['password']);
-
-        $user = User::create($input);
+        // Associar Roles ao Usuário
         $user->assignRole($request->input('roles'));
 
-        return redirect()->route('users.index')
-                        ->with('success','User created successfully');
+        return redirect()->route('users.index', ['mode' => 'createadmin'])->with('success', 'Usuário criado com sucesso');
     }
+
 
     /**
      * Display the specified resource.
@@ -74,7 +92,7 @@ class UserController extends Controller
     {
         $user = User::find($id);
 
-        return view('users.show',compact('user'));
+        return view('users.show', compact('user'), ['mode' => 'show']);
     }
 
     /**
@@ -86,10 +104,10 @@ class UserController extends Controller
     public function edit($id): View
     {
         $user = User::find($id);
-        $roles = Role::pluck('name','name')->all();
-        $userRole = $user->roles->pluck('name','name')->all();
+        $roles = Role::pluck('name', 'name')->all();
+        $userRole = $user->roles->pluck('name', 'name')->all();
 
-        return view('users.edit',compact('user','roles','userRole'));
+        return view('users.edit', compact('user', 'roles', 'userRole'), ['mode' => 'edit']);
     }
 
     /**
@@ -101,28 +119,35 @@ class UserController extends Controller
      */
     public function update(Request $request, $id): RedirectResponse
     {
-        $this->validate($request, [
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email,'.$id,
-            'password' => 'same:confirm-password',
-            'roles' => 'required'
+        Validator::make($request->all(), [
+            'name' => ['required', 'string', 'max:255'],
+            'cpf' => ['required', 'string', 'max:18', Rule::unique('users')->ignore($id), new CpfValidation()],
+            'email' => ['required', 'string', 'email', 'max:255',  Rule::unique('users')->ignore($id)],
+            'password' => ['sometimes', 'nullable', 'min:8'],
+            'roles' => 'required|array',
+            'roles.*' => 'exists:roles,name',
+        ])->validate();
+
+        $user = User::findOrFail($id);
+
+        // Verifica se a senha foi preenchida, se não, mantém a antiga
+        $password = $request->filled('password')
+            ? Hash::make($request->input('password'))
+            : $user->password;
+
+        // Atualizar os dados do usuário
+        $user->update([
+            'name' => $request->input('name'),
+            'cpf' => preg_replace('/\D/', '', $request->input('cpf')),
+            'email' => $request->input('email'),
+            'password' => $request->filled('password') ? Hash::make($request->input('password')) : $user->password,
         ]);
 
-        $input = $request->all();
-        if(!empty($input['password'])){
-            $input['password'] = Hash::make($input['password']);
-        }else{
-            $input = Arr::except($input,array('password'));
-        }
-
-        $user = User::find($id);
-        $user->update($input);
-        DB::table('model_has_roles')->where('model_id',$id)->delete();
-
-        $user->assignRole($request->input('roles'));
+        // Atualizar Roles do Usuário
+        $user->syncRoles($request->input('roles'));
 
         return redirect()->route('users.index')
-                        ->with('success','User updated successfully');
+            ->with('success', 'Usuário atualizado com sucesso');
     }
 
     /**
@@ -135,6 +160,6 @@ class UserController extends Controller
     {
         User::find($id)->delete();
         return redirect()->route('users.index')
-                        ->with('success','User deleted successfully');
+            ->with('success', 'Usuário deletado com sucesso');
     }
 }

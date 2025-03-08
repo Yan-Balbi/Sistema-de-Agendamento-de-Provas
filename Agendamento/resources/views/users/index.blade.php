@@ -8,11 +8,11 @@
 <div class="bg-gray-100 p-6">
     <div class="max-w-5xl mx-auto bg-white shadow-md rounded-lg p-6 mt-5">
         <h1 class="text-xl font-semibold text-gray-800 mb-4">Gerenciamento de Usuários</h1>
-
-        <a href="{{ route('users.create') }}" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition">
-            <i class="fa fa-plus"></i> Criar Novo Usuário
-        </a>
-
+        @can('user-create')
+            <a href="{{ route('users.create') }}" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition">
+                <i class="fa fa-plus"></i> Criar Novo Usuário
+            </a>
+        @endcan
         @if(session('success'))
             <div class="bg-green-100 text-green-700 p-3 rounded-lg mt-4">
                 {{ session('success') }}
@@ -26,7 +26,7 @@
                     <th class="p-3">Nome</th>
                     <th class="p-3">E-mail</th>
                     <th class="p-3">CPF</th>
-                    <th class="p-3">Funções</th>
+                    <th class="p-3">Papél</th>
                     <th class="p-3">Ações</th>
                 </tr>
             </thead>
@@ -46,19 +46,25 @@
                         </td>
                         <td class="p-3">
                             <div class="flex space-x-2">
-                                <a href="{{ route('users.show', $user->id) }}" class="bg-blue-500 text-white px-3 py-1 rounded-lg hover:bg-blue-600 transition">
-                                    <i class="fa-solid fa-list"></i> Ver
-                                </a>
-                                <a href="{{ route('users.edit', $user->id) }}" class="bg-yellow-500 text-white px-3 py-1 rounded-lg hover:bg-yellow-600 transition">
-                                    <i class="fa-solid fa-pen-to-square"></i> Editar
-                                </a>
-                                <form method="POST" action="{{ route('users.destroy', $user->id) }}" onsubmit="return confirm('Tem certeza que deseja excluir?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition">
-                                        <i class="fa-solid fa-trash"></i> Excluir
-                                    </button>
-                                </form>
+                                @can('user-update')
+                                    <a href="{{ route('users.show', $user->id) }}" class="bg-blue-500 text-white px-3 py-1 rounded-lg hover:bg-blue-600 transition">
+                                        <i class="fa-solid fa-list"></i> Ver
+                                    </a>
+                                @endcan
+                                @can('user-update')
+                                    <a href="{{ route('users.edit', $user->id) }}" class="bg-yellow-500 text-white px-3 py-1 rounded-lg hover:bg-yellow-600 transition">
+                                        <i class="fa-solid fa-pen-to-square"></i> Editar
+                                    </a>
+                                @endcan
+                                @can('user-delete')
+                                    <form method="POST" action="{{ route('users.destroy', $user->id) }}" onsubmit="return confirm('Tem certeza que deseja excluir?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition">
+                                            <i class="fa-solid fa-trash"></i> Excluir
+                                        </button>
+                                    </form>
+                                @endcan
                             </div>
                         </td>
                     </tr>
