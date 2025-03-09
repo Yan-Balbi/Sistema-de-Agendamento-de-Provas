@@ -65,13 +65,25 @@
                     <ul class="dropdown-menu p-2" aria-labelledby="salasDropdown">
                         <li><a class="btn btn-primary w-100 text-start" href="{{ route('salas.create') }}">Cadastro</a>
                         </li>
-                        <li><a class="btn btn-secondary w-100 text-start mt-1"
-                                href="{{ route('salas.index') }}">Listagem</a></li>
+                        <li>
+                            <a class="btn btn-secondary w-100 text-start mt-1" href="{{ route('salas.index') }}">Listagem</a>
+                            </li>
                     </ul>
                 </li>
 
-                <li class="nav-item">
-                    <a class="navbar-link" href="{{ url('agendamento') }}">Agendamentos</a>
+                <li class="nav-item dropdown">
+                    <a class="navbar-link dropdown-toggle" href="#" id="agendamentosDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        Agendamentos
+                    </a>
+                    <ul class="dropdown-menu p-2" aria-labelledby="agendamentosDropdown">
+                        <li>
+                            <a class="btn btn-primary w-100 text-start" href="{{ route('agendamentos.create') }}">Cadastro</a>
+                        </li>
+                        <li>
+                            <a class="btn btn-secondary w-100 text-start mt-1" href="{{ route('agendamentos.index') }}">Listagem</a>
+                        </li>
+                    </ul>
                 </li>
 
                 @can(['role-list', 'user-list'])

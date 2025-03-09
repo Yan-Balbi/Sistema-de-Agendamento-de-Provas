@@ -3,11 +3,11 @@
 use App\Http\Controllers\SalaController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/cadastro/sala', [SalaController::class, 'create'])->name('salas.create');
+Route::get('/sala/cadastro', [SalaController::class, 'create'])->name('salas.create');
 
-Route::post('/cadastro/sala', [SalaController::class, 'store'])->name('salas.store');
+Route::post('/sala/cadastro', [SalaController::class, 'store'])->name('salas.store');
 
-Route::get('/listagem/salas', [SalaController::class, 'index'])->name('salas.index');
+Route::get('/sala/listar', [SalaController::class, 'index'])->name('salas.index');
 
 Route::get('/sala/{id}', [SalaController::class, 'edit'])->name('salas.edit');
 

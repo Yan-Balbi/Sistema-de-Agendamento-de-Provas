@@ -15,6 +15,7 @@ Route::get('/', function () {
 
 Route::prefix('/')->group(base_path('routes/professores.php'));
 Route::prefix('/')->group(base_path('routes/salas.php'));
+Route::prefix('/')->group(base_path('routes/agendamentos.php'));
 
 Route::prefix('/roles')->group(base_path('routes/roles.php'));
 Route::prefix('/users')->group(base_path('routes/users.php'));
