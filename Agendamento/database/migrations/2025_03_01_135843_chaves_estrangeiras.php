@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('agendamentos', function (Blueprint $table) {
-            $table->foreignId('sala_id')->constrained('salas')->onDelete('cascade');
-            $table->foreignId('intervalo_de_hora_de_agendamento_id')->references('id')->on('intervalo_de_hora_de_agendamentos')->onDelete('cascade');
-            $table->foreignId('intervalo_de_data_de_agendamento_id')->references('id')->on('intervalo_de_data_de_agendamentos')->onDelete('cascade');
-            $table->foreignId('disciplina_id')->references('id')->on('disciplinas')->onDelete('cascade');
+            $table->foreign('sala_id')->references('id')->on('salas')->onDelete('cascade');
+            $table->foreign('intervalo_de_hora_de_agendamento_id')->references('id')->on('intervalo_de_hora_de_agendamentos')->onDelete('cascade');
+            $table->foreign('intervalo_de_data_de_agendamento_id')->references('id')->on('intervalo_de_data_de_agendamentos')->onDelete('cascade');
+            $table->foreign('disciplina_id')->references('id')->on('disciplinas')->onDelete('cascade');
         });
 
         Schema::table('turmas', function (Blueprint $table) {

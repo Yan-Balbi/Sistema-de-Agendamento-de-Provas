@@ -8,6 +8,7 @@ use App\Models\IntervaloDeHoraDeAgendamento;
 use App\Models\Turma;
 use App\Models\Curso;
 use App\Models\Professor;
+use App\Models\Sala;
 use Illuminate\Support\Facades\DB;
 
 class AgendamentoController extends Controller
@@ -35,12 +36,19 @@ class AgendamentoController extends Controller
     public function store(Request $request)
     {
         $agendamento = $request->all();
-        if($agendamento){
-            Agendamento::create($agendamento);
-            return redirect()->route('agendamentos.create')->with('success','Sala adicionada!');
-        }
-        return redirect()->route('agendamentos.create')->with('error','Falha ao cadastrar sala. Campos vazios');
+        if($request->disciplina_id and $request->data and $request->sala_id and $request->intervalo_de_hora_de_agendamento_id){
+            try {
+                $agendamento = $request->all();
 
+                Agendamento::create($agendamento);
+
+                return redirect()->route('agendamentos.create')->with('success', 'Sala adicionada!');
+            } catch (\Exception $e) {
+                return redirect()->route('agendamentos.create')->with('error', 'Falha ao cadastrar sala. Erro: ' . $e->getMessage());
+            }
+        } else {
+            return redirect()->route('agendamentos.create')->with('warning', 'Preencha todos os campos antes de agendar a prova!');
+        }
     }
 
     /**
@@ -120,6 +128,14 @@ class AgendamentoController extends Controller
             WHERE p.id = ? and t.id = ?;', [$request->professorId, $request->turmaId]);
         }
         return response()->json($disciplinas);
+    }
+
+    public function buscarSalas(){
+        $salas = [];
+
+        $salas = Sala::all();
+
+        return response()->json($salas);
     }
 
     public function buscarHorarios(){

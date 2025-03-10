@@ -23,6 +23,8 @@ Route::get('/agendamento/index-professores', [AgendamentoController::class, 'bus
 
 Route::get('/agendamento/index-disciplinas', [AgendamentoController::class, 'buscarDisciplinasDeUmaTurmaDeUmCursoEDeUmProfessor'])->name('agendamentos.index-disciplinas');
 
+Route::get('/agendamento/index-salas', [AgendamentoController::class, 'buscarSalas'])->name('agendamentos.index-salas');
+
 Route::get('/agendamento/index-horarios', [AgendamentoController::class, 'buscarHorarios'])->name('agendamentos.index-horarios');
 
 

@@ -12,49 +12,60 @@
 <div class="bg-gray-100 p-6">
     @if (session('success'))
         <p class="bg-green-100 border-l-4 border-green-500 text-black-700 p-4 mb-4 rounded-lg">{{ session('success') }}</p>
-    @elseif (session('eror'))
-        <p class="bg-red-100 border-l-4 border-red-500 text-black-700 p-4 mb-4 rounded-lg">{{ session('success') }}</p>
+    @elseif (session('error'))
+        <p class="bg-red-100 border-l-4 border-red-500 text-black-700 p-4 mb-4 rounded-lg">{{ session('error') }}</p>
+    @elseif (session('warning'))
+    <p class="bg-yellow-100 border-l-4 border-yellow-500 text-black-700 p-4 mb-4 rounded-lg">{{ session('warning') }}</p>
     @endif
     <div class="max-w-2xl mx-auto bg-white shadow-md rounded-lg p-6 mt-10">
-        <h2 class="text-2xl font-semibold text-gray-800 ">Cadastro de Agendamento de Provas</h2>
+        <h2 class="text-2xl font-semibold text-gray-800 ">Agendamento de Provas</h2>
+
+        <!-- ComboBox de Cursos -->
+        <label for="curso">Curso:</label>
+        <select id="curso" name="curso" class="bg-gray-100 border border-gray-200 text-gray-800 text-sm rounded-lg focus:ring-blue-500 focus:border-green-500 block w-full p-2.5">
+            <option value="">Selecione um curso</option>
+        </select>
+        <br>
+
+        <!-- ComboBox de Turmas -->
+        <label for="turma">Turma:</label>
+        <select id="turma" name="turma" disabled class="bg-gray-100 border border-gray-200 text-gray-800 text-sm rounded-lg focus:ring-blue-500 focus:border-green-500 block w-full p-2.5">
+            <option value="">Selecione uma turma</option>
+        </select>
+        <br>
+
+        <!-- ComboBox de Professores -->
+        <label for="professor">Professor:</label>
+        <select id="professor" name="professor" disabled class="bg-gray-100 border border-gray-200 text-gray-800 text-sm rounded-lg focus:ring-blue-500 focus:border-green-500 block w-full p-2.5">
+            <option value="">Selecione um professor</option>
+        </select>
+        <br>
+
         <form method="POST" action="{{ route('agendamentos.store') }}">
-            <!-- ComboBox de Cursos -->
-            <label for="curso">Curso:</label>
-            <select id="curso" name="curso" class="bg-gray-100 border border-gray-200 text-gray-800 text-sm rounded-lg focus:ring-blue-500 focus:border-green-500 block w-full p-2.5">
-                <option value="">Selecione um curso</option>
-            </select>
-            <br>
-
-            <!-- ComboBox de Turmas -->
-            <label for="turma">Turma:</label>
-            <select id="turma" name="turma" disabled class="bg-gray-100 border border-gray-200 text-gray-800 text-sm rounded-lg focus:ring-blue-500 focus:border-green-500 block w-full p-2.5">
-                <option value="">Selecione uma turma</option>
-            </select>
-            <br>
-
-            <!-- ComboBox de Professores -->
-            <label for="professor">Professor:</label>
-            <select id="professor" name="professor" disabled class="bg-gray-100 border border-gray-200 text-gray-800 text-sm rounded-lg focus:ring-blue-500 focus:border-green-500 block w-full p-2.5">
-                <option value="">Selecione um professor</option>
-            </select>
-            <br>
-
+            @csrf
             <!-- ComboBox de Disciplinas -->
             <label for="disciplina">Disciplina:</label>
-            <select id="disciplina" name="disciplina" disabled class="bg-gray-100 border border-gray-200 text-gray-800 text-sm rounded-lg focus:ring-blue-500 focus:border-green-500 block w-full p-2.5">
+            <select id="disciplina" name="disciplina_id" disabled class="bg-gray-100 border border-gray-200 text-gray-800 text-sm rounded-lg focus:ring-blue-500 focus:border-green-500 block w-full p-2.5">
                 <option value="">Selecione uma disciplina</option>
             </select>
             <br>
 
-            <div placeholder="Select date">
-                <label for="birthday" >Data de agendamento:</label>
-                <input type="date" id="birthday" name="birthday" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto ps-10 p-2.5">
+            <div placeholder="Selecione uma data">
+                <label for="data" >Data de agendamento:</label>
+                <input type="date" id="birthday" name="data" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto ps-10 p-2.5">
             </div>
             <br>
 
+            <!-- ComboBox de Salas -->
+            <label for="sala">Sala:</label>
+            <select id="sala" name="sala_id" disabled class="bg-gray-100 border border-gray-200 text-gray-800 text-sm rounded-lg focus:ring-blue-500 focus:border-green-500 block w-full p-2.5">
+                <option value="">Selecione um sala</option>
+            </select>
+            <br>
+
             <!-- ComboBox de Horários -->
-            <label for="disciplina">Horário:</label>
-            <select id="horario" name="horario" disabled class="bg-gray-100 border border-gray-200 text-gray-800 text-sm rounded-lg focus:ring-blue-500 focus:border-green-500 block w-full p-2.5">
+            <label for="horario">Horário:</label>
+            <select id="horario" name="intervalo_de_hora_de_agendamento_id" disabled class="bg-gray-100 border border-gray-200 text-gray-800 text-sm rounded-lg focus:ring-blue-500 focus:border-green-500 block w-full p-2.5">
                 <option value="">Selecione um horario</option>
             </select>
             <br>
@@ -115,14 +126,24 @@
                             $('#disciplina').append(new Option(disciplina.nome, disciplina.id));
                         });
                     });
+                    $('#disciplina').prop('disabled', false);
                 }
             });
 
-            // Preencher ComboBox de Cursos
+            // Preencher ComboBox de Salas
+            $.get('/agendamento/index-salas', function (data) {
+                data.forEach(sala => {
+                    $('#sala').append(new Option(sala.nome, sala.id));
+                });
+                $('#sala').prop('disabled', false);
+            });
+
+            // Preencher ComboBox de Horarios
             $.get('/agendamento/index-horarios', function (data) {
                 data.forEach(horario => {
                     $('#horario').append(new Option(horario.hora_inicial+' - '+horario.hora_final, horario.id));
                 });
+                $('#horario').prop('disabled', false);
             });
         });
     </script>
