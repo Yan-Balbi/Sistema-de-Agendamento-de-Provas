@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class IntervaloDeHoraDeAgentamento extends Model
+class IntervaloDeHoraDeAgendamento extends Model
 {
     protected $table = 'intervalo_de_hora_de_agendamentos';
 

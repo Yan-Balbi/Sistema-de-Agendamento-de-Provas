@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('intervalo_de_hora_de_agentamentos', function (Blueprint $table) {
+        Schema::create('intervalo_de_hora_de_agendamentos', function (Blueprint $table) {
             $table->id();
-            $table->date('hora_inicial');
-            $table->date('hora_final');
+            $table->time('hora_inicial');
+            $table->time('hora_final');
         });
     }
 
@@ -23,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('intervalo_de_hora_de_agentamentos');
+        Schema::dropIfExists('intervalo_de_hora_de_agendamentos');
     }
 };

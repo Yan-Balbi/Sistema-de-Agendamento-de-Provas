@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('intervalo_de_data_de_agendamentos', function (Blueprint $table) {
+        Schema::create('professor_has_disciplinas', function (Blueprint $table) {
             $table->id();
-            $table->date('data_inicial');
-            $table->date('data_final');
+            $table->foreignId('professor_id')->constrained()->onDelete('cascade');
+            $table->foreignId('disciplina_id')->constrained()->onDelete('cascade');
+            $table->timestamps();
         });
     }
 
@@ -23,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('intervalo_de_data_de_agendamentos');
+        Schema::dropIfExists('professor_has_disciplinas');
     }
 };

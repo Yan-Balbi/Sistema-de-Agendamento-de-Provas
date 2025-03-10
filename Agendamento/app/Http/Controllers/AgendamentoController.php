@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Agendamento;
 use Illuminate\Http\Request;
-use App\Models\Sala;
+use App\Models\IntervaloDeHoraDeAgendamento;
 use App\Models\Turma;
+use App\Models\Curso;
+use App\Models\Professor;
 use Illuminate\Support\Facades\DB;
 
 class AgendamentoController extends Controller
@@ -32,6 +34,12 @@ class AgendamentoController extends Controller
      */
     public function store(Request $request)
     {
+        $agendamento = $request->all();
+        if($agendamento){
+            Agendamento::create($agendamento);
+            return redirect()->route('agendamentos.create')->with('success','Sala adicionada!');
+        }
+        return redirect()->route('agendamentos.create')->with('error','Falha ao cadastrar sala. Campos vazios');
 
     }
 
@@ -66,5 +74,59 @@ class AgendamentoController extends Controller
     public function destroy(Turma $turma)
     {
 
+    }
+
+    public function buscarTodosOsCursos(){
+        $cursos = Curso::all();
+        return response()->json($cursos);
+    }
+
+    public function buscarTurmasDeUmCurso(Request $request){
+
+        $turmasDeUmCurso = [];
+
+        if($request->cursoId){
+            $turmasDeUmCurso = DB::select('SELECT * FROM turmas WHERE curso_id = ?', [$request->cursoId]);
+        }
+
+        return response()->json($turmasDeUmCurso);
+    }
+
+    public function buscarTodosOsProfessoresDeUmaTurma(Request $request){
+
+        $professores = [];
+
+        if($request->turmaId){
+            $professores = Professor::all();
+        }
+        return response()->json($professores);
+    }
+
+    public function buscarDisciplinasDeUmaTurmaDeUmCursoEDeUmProfessor(Request $request){
+
+        $disciplinas = [];
+        if($request->professorId and $request->turmaId){
+            $disciplinas = DB::select('SELECT d.* FROM disciplinas d
+            JOIN turma_has_disciplinas thd
+            ON d.id = thd.disciplina_id
+            JOIN turmas t
+            ON thd.turma_id = t.id
+            JOIN cursos c
+            ON t.curso_id = c.id
+            JOIN professor_has_disciplinas phd
+            ON d.id = phd.disciplina_id
+            JOIN professors p
+            ON phd.professor_id = p.id
+            WHERE p.id = ? and t.id = ?;', [$request->professorId, $request->turmaId]);
+        }
+        return response()->json($disciplinas);
+    }
+
+    public function buscarHorarios(){
+        $horarios = [];
+
+        $horarios = IntervaloDeHoraDeAgendamento::all();
+
+        return response()->json($horarios);
     }
 }
