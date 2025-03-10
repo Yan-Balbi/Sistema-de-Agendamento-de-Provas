@@ -68,6 +68,8 @@
             <select id="horario" name="intervalo_de_hora_de_agendamento_id" disabled class="bg-gray-100 border border-gray-200 text-gray-800 text-sm rounded-lg focus:ring-blue-500 focus:border-green-500 block w-full p-2.5">
                 <option value="">Selecione um horario</option>
             </select>
+            <input type="hidden" id="horario_inicial" name="hora_inicial">
+            <input type="hidden" id="horario_final" name="hora_final">
             <br>
 
             <button type="submit" class="btn cadastrar">Cadastrar</button>
@@ -139,11 +141,27 @@
             });
 
             // Preencher ComboBox de Horarios
+            let horariosData = [];  // Variável para armazenar os dados de horários
+
+            // Preencher ComboBox de Horarios
             $.get('/agendamento/index-horarios', function (data) {
                 data.forEach(horario => {
                     $('#horario').append(new Option(horario.hora_inicial+' - '+horario.hora_final, horario.id));
                 });
+                horariosData = data;  // Armazenar os dados de horários na variável global
                 $('#horario').prop('disabled', false);
+            });
+
+            // Quando selecionar um horário, preencher os campos ocultos
+            $('#horario').change(function() {
+                let horarioId = $(this).val();
+                let selectedHorario = horariosData.find(h => h.id == horarioId);  // Encontra o objeto correspondente ao horário selecionado
+
+                if (selectedHorario) {
+                    // Preencher os campos ocultos com os horários selecionados
+                    $('#horario_inicial').val(selectedHorario.hora_inicial);
+                    $('#horario_final').val(selectedHorario.hora_final);
+                }
             });
         });
     </script>

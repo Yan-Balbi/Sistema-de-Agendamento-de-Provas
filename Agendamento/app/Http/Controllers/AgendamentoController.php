@@ -36,18 +36,22 @@ class AgendamentoController extends Controller
     public function store(Request $request)
     {
         $agendamento = $request->all();
-        if($request->disciplina_id and $request->data and $request->sala_id and $request->intervalo_de_hora_de_agendamento_id){
-            try {
-                $agendamento = $request->all();
+        if($this->verificarDisponibilidadeDeSalaEmUmHorariodeUmDia($request)){
+            if($request->disciplina_id and $request->data and $request->sala_id and $request->intervalo_de_hora_de_agendamento_id){
+                try {
+                    $agendamento = $request->all();
 
-                Agendamento::create($agendamento);
+                    Agendamento::create($agendamento);
 
-                return redirect()->route('agendamentos.create')->with('success', 'Sala adicionada!');
-            } catch (\Exception $e) {
-                return redirect()->route('agendamentos.create')->with('error', 'Falha ao cadastrar sala. Erro: ' . $e->getMessage());
+                    return redirect()->route('agendamentos.create')->with('success', 'Sala adicionada!');
+                } catch (\Exception $e) {
+                    return redirect()->route('agendamentos.create')->with('error', 'Falha ao cadastrar sala. Erro: ' . $e->getMessage());
+                }
+            } else {
+                return redirect()->route('agendamentos.create')->with('warning', 'Preencha todos os campos antes de agendar a prova!');
             }
         } else {
-            return redirect()->route('agendamentos.create')->with('warning', 'Preencha todos os campos antes de agendar a prova!');
+            return redirect()->route('agendamentos.create')->with('error', 'Já há uma prova agendada para as '.$request->hora_inicial.' - '.$request->hora_final.' do dia '.$request->data.'. Tente outro horário.');
         }
     }
 
@@ -144,5 +148,19 @@ class AgendamentoController extends Controller
         $horarios = IntervaloDeHoraDeAgendamento::all();
 
         return response()->json($horarios);
+    }
+
+    private function verificarDisponibilidadeDeSalaEmUmHorariodeUmDia(Request $request){
+        $contagem = DB::select('SELECT COUNT(*) as contagem_agendamento_repetido
+            FROM agendamentos
+            WHERE sala_id = ? and intervalo_de_hora_de_agendamento_id = ? and data = ?;',
+        [$request->sala_id, $request->intervalo_de_hora_de_agendamento_id, $request->data]);
+
+        if($contagem == 0){
+            return true;
+        }
+
+        return false;
+
     }
 }
