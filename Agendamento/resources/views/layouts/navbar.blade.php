@@ -1,7 +1,7 @@
 <div class="teste">
     <nav class="nav">
         <div class="logo">
-            <img src="{{ asset('images/iff-logo.png') }}" width="100%">
+            <a class="navbar-link" href="/"><img src="{{ asset('images/iff-logo.png') }}" width="100%"></a>
         </div>
         <div class="div-nav-link">
             <ul class="nav-links">
@@ -67,7 +67,7 @@
                         </li>
                         <li>
                             <a class="btn btn-secondary w-100 text-start mt-1" href="{{ route('salas.index') }}">Listagem</a>
-                            </li>
+                        </li>
                     </ul>
                 </li>
 
@@ -112,24 +112,24 @@
         </div>
         <div class="btn-login-container">
             @if (Route::has('login'))
-                @auth
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" class="btn-login">
-                            Logout
-                        </button>
-                    </form>
-                @else
-                    <a href="{{ route('login') }}" class="btn-login">
-                        Log in
-                    </a>
+            @auth
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="btn-login">
+                    Logout
+                </button>
+            </form>
+            @else
+            <a href="{{ route('login') }}" class="btn-login">
+                Log in
+            </a>
 
-                    @if (Route::has('register'))
-                        <a href="{{ route('register') }}" class="btn-login">
-                            Register
-                        </a>
-                    @endif
-                @endauth
+            @if (Route::has('register'))
+            <a href="{{ route('register') }}" class="btn-login">
+                Register
+            </a>
+            @endif
+            @endauth
             @endif
         </div>
     </nav>
