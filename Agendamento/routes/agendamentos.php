@@ -9,11 +9,12 @@ Route::post('/agendamento/cadastro', [AgendamentoController::class, 'store'])->n
 
 Route::get('/agendamento/listar', [AgendamentoController::class, 'index'])->name('agendamentos.index');
 
-// Route::get('/agendamento/{id}', [AgendamentoController::class, 'edit'])->name('agendamento.edit');
+Route::get('/agendamento/edit/{id}', [AgendamentoController::class, 'edit'])->name('agendamentos.edit');
 
-// Route::put('/agendamento/{id}', [AgendamentoController::class, 'update'])->name('agendamento.update');
 
-// Route::delete('/agendamento/delete/{id}', [AgendamentoController::class, 'destroy'])->name('agendamento.destroy');
+Route::put('/agendamento/{id}', [AgendamentoController::class, 'update'])->name('agendamentos.update');
+
+Route::delete('/agendamento/delete/{id}', [AgendamentoController::class, 'destroy'])->name('agendamento.destroy');
 
 Route::get('/agendamento/index-cursos', [AgendamentoController::class, 'buscarTodosOsCursos'])->name('agendamentos.index-cursos');
 

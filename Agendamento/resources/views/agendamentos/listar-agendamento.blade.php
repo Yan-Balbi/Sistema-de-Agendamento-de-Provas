@@ -6,7 +6,7 @@
     function getById(button) {
         var id = button.getAttribute("data-id");
         console.log("ID da sala: " + id);
-        window.location.href = "{{ route('salas.edit', '') }}" + "/" + id;
+        window.location.href = "{{ route('agendamentos.edit', '') }}" + "/" + id;
     }
 </script>
 
@@ -31,15 +31,15 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($agendamento as $agendamento)
+                @foreach ($agendamentos as $agendamento)
                 <tr class="bg-white border-b hover:bg-gray-100 transition">
 
-                    <td class="p-3 text-green-600 min-w-[600px]">{{ $agendamento->nome }}</td>
+                    <td class="p-3 text-green-600 min-w-[600px]">Avalização de {{  $agendamento->disciplina->nome  }} - {{ $agendamento->data }}</td>
                     <td class="p-3">
                         <div class="div-botoes">
                             <button class="btn visualizar" data-id="{{ $agendamento->id }}" onclick="getById(this)"> Visualizar </button>
 
-                            <form method="POST" action="{{ route('salas.destroy', $agendamento->id) }}">
+                            <form method="POST" action="{{ route('agendamento.destroy', $agendamento->id) }}">
                                 @csrf
                                 @method('DELETE')
                                 <button class="btn apagar" type="submit"> Apagar </button>
@@ -56,7 +56,7 @@
 <tbody>
     <nav>
         <ul class="pagination pagination-sm">
-            {{ $agendamento->links() }}
+            {{ $agendamentos->links() }}
         </ul>
     </nav>
 </tbody>

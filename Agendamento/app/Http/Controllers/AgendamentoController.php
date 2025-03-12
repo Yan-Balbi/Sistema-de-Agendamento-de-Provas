@@ -18,8 +18,8 @@ class AgendamentoController extends Controller
      */
     public function index()
     {
-        $agendamento = Agendamento::paginate(7);
-        return view('agendamentos.listar-agendamento', compact('agendamento'));
+        $agendamentos = Agendamento::with(['sala','disciplina','intervaloDeHora'])->paginate(7);
+        return view('agendamentos.listar-agendamento', compact('agendamentos'));
     }
 
     /**
@@ -66,26 +66,53 @@ class AgendamentoController extends Controller
     /**
      * Mostra o formulário de edição de uma turma.
      */
-    public function edit(Turma $turma)
+    public function edit($id)
     {
-
+        // $agendamento = DB::table('agendamentos')->with(['sala','disciplina','intervaloDeHora'])->where('id', $id)->first();
+        $agendamentos = Agendamento::with(['sala', 'intervaloDeHora', 'disciplina'])->findOrFail($id);
+        $salaSelecionada = $agendamentos->sala ?? null;
+        $intervaloDeHora = $agendamentos->intervaloDeHora ?? null;
+        $dataSelecionada = $agendamentos->data ?? null;
+        return View('agendamentos.editar-agendamento', compact(['agendamentos','salaSelecionada','intervaloDeHora','dataSelecionada']));
     }
 
     /**
      * Atualiza uma turma no banco de dados.
      */
-    public function update(Request $request, Turma $turma)
+    public function update(Request $request, $id)
     {
-
+        $agendamento = Agendamento::find($id);
+        $agendamento->sala_id = $request->input('sala_id');//talvez não seja input
+        $agendamento->intervalo_de_hora_de_agendamento_id = $request->input('intervalo_de_hora_de_agendamento_id');//talvez não seja input
+        $agendamento->disciplina_id = $request->input('disciplina_id');//talvez não seja input
+        $agendamento->data = $request->input('data');
+        $agendamento->save();
+        return redirect()->route('agendamentos.index', $id)->with('success', 'Agendamento atualizado com successo');
 
     }
+    // public function update(Request $request, $id)
+    // {
+    //     try {
+    //         $agendamento = Agendamento::findOrFail($id);  // Recupera o agendamento pelo ID
+    //         $agendamento->update($request->only([
+    //             'disciplina_id', 'data', 'intervalo_de_hora_de_agendamento_id', 'sala_id'
+    //         ]));
+
+    //         return redirect()->route('agendamentos.index')->with('success', 'Agendamento atualizado com sucesso!');
+    //     } catch (\Exception $e) {
+    //         return redirect()->route('agendamentos.index')->with('error', 'Falha ao atualizar o agendamento: ' . $e->getMessage());
+    //     }
+    // }
 
     /**
      * Remove uma turma do banco de dados.
      */
-    public function destroy(Turma $turma)
+    public function destroy( $id)
     {
-
+        $agendamento = Agendamento::findOrFail($id);
+        $agendamento->delete();
+        // $sala = Sala::destroy($id);
+        return redirect()->route('agendamentos.index', $id)->with('danger', 'Agendamento removido com successo');
     }
 
     public function buscarTodosOsCursos(){
