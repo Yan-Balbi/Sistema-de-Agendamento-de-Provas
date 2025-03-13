@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('content')
 
 <head>
     <meta charset="UTF-8">
