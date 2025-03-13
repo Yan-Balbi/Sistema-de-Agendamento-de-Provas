@@ -8,11 +8,10 @@ use App\Http\Controllers\DisciplinaController;
 use App\Http\Controllers\ProfessorController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\HorariosController;
 use Illuminate\Support\Facades\Auth;
 
-Route::get('/', function () {
-    return view('index');
-});
+Route::get('/', [HorariosController::class, 'index'])->name('home');
 
 // Route::middleware([
 //     'auth:sanctum',
