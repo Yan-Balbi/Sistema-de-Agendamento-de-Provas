@@ -13,7 +13,7 @@ class HoraAgendamentoController extends Controller
     public function index()
     {
         $horarios = IntervaloDeHoraDeAgendamento::all();
-        return response()->json($horarios);
+        return view('hora-agendamento.index', compact('horarios'));
     }
 
     /**
