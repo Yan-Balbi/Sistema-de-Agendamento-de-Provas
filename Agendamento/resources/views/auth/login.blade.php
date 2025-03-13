@@ -1,48 +1,64 @@
-<x-guest-layout>
-    <x-authentication-card>
-        <x-slot name="logo">
-            <x-authentication-card-logo />
-        </x-slot>
+@extends('layouts.app')
 
-        <x-validation-errors class="mb-4" />
+@section('content')
 
-        @session('status')
-            <div class="mb-4 font-medium text-sm text-green-600">
-                {{ $value }}
-            </div>
-        @endsession
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ asset('css/estilo-login.css') }}" />
+</head>
+
+<div class="bg-gray-100 p-6">
+    <div class="max-w-md mx-auto bg-white shadow-md rounded-lg p-6 mt-10">
+        <h2 class="text-2xl font-semibold text-gray-800 text-center">Login</h2>
+
+        @if (session('status'))
+        <div class="mb-4 font-medium text-sm text-green-600">
+            {{ session('status') }}
+        </div>
+        @endif
+
+        @if ($errors->any())
+        <div class="mb-4">
+            <ul class="bg-red-100 text-red-700 p-4 rounded-lg">
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
 
         <form method="POST" action="{{ route('login') }}">
             @csrf
 
             <div>
-                <x-label for="email" value="{{ __('Email') }}" />
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
+                <label for="email" class="block text-gray-700">Email</label>
+                <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus
+                    class="block mt-1 w-full p-2 border border-gray-300 rounded-md">
             </div>
 
             <div class="mt-4">
-                <x-label for="password" value="{{ __('Password') }}" />
-                <x-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="current-password" />
+                <label for="password" class="block text-gray-700">Senha</label>
+                <input id="password" type="password" name="password" required
+                    class="block mt-1 w-full p-2 border border-gray-300 rounded-md">
             </div>
 
             <div class="block mt-4">
                 <label for="remember_me" class="flex items-center">
-                    <x-checkbox id="remember_me" name="remember" />
-                    <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
+                    <input id="remember_me" type="checkbox" name="remember" class="mr-2">
+                    <span class="text-sm text-gray-600">Lembrar-me</span>
                 </label>
             </div>
 
-            <div class="flex items-center justify-end mt-4">
-                @if (Route::has('password.request'))
-                    <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                        {{ __('Forgot your password?') }}
-                    </a>
-                @endif
-
-                <x-button class="ms-4">
-                    {{ __('Log in') }}
-                </x-button>
+                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                    Entrar
+                </button>
             </div>
         </form>
-    </x-authentication-card>
-</x-guest-layout>
+    </div>
+</div>
+
+@endsection
