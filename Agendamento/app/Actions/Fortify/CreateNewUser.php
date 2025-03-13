@@ -31,6 +31,12 @@ class CreateNewUser implements CreatesNewUsers
             ]);
         }
 
+        if(User::where('email', $input['email'])->exists()) {
+            throw ValidationException::withMessages([
+                'email' => 'Este e-mail já está registrado.',
+            ]);
+        }
+
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
             'cpf' => ['required', 'string', 'max:18', 'unique:users', new CpfValidation()],
