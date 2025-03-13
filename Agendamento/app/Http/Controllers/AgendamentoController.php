@@ -43,12 +43,12 @@ class AgendamentoController extends Controller
 
                     Agendamento::create($agendamento);
 
-                    return redirect()->route('agendamentos.create')->with('success', 'Sala adicionada!');
+                    return redirect()->route('agendamentos.create')->with('success', 'Agendamento adicionado!');
                 } catch (\Exception $e) {
-                    return redirect()->route('agendamentos.create')->with('error', 'Falha ao cadastrar sala. Erro: ' . $e->getMessage());
+                    return redirect()->route('agendamentos.create')->with('error', 'Falha ao cadastrar agendamento. Erro: ' . $e->getMessage());
                 }
             } else {
-                return redirect()->route('agendamentos.create')->with('warning', 'Preencha todos os campos antes de agendar a prova!');
+                return redirect()->route('agendamentos.create')->with('warning', 'Preencha todos os campos antes de agendar o agendamento!');
             }
         } else {
             return redirect()->route('agendamentos.create')->with('error', 'Já há uma prova agendada para as '.$request->hora_inicial.' - '.$request->hora_final.' do dia '.$request->data.'. Tente outro horário.');
@@ -82,13 +82,19 @@ class AgendamentoController extends Controller
     public function update(Request $request, $id)
     {
         $agendamento = Agendamento::find($id);
-        $agendamento->sala_id = $request->input('sala_id');//talvez não seja input
-        $agendamento->intervalo_de_hora_de_agendamento_id = $request->input('intervalo_de_hora_de_agendamento_id');//talvez não seja input
-        $agendamento->disciplina_id = $request->input('disciplina_id');//talvez não seja input
-        $agendamento->data = $request->input('data');
-        $agendamento->save();
-        return redirect()->route('agendamentos.index', $id)->with('success', 'Agendamento atualizado com successo');
-
+        if($this->verificarDisponibilidadeDeSalaEmUmHorariodeUmDia($request)){
+            if($request->disciplina_id and $request->data and $request->sala_id and $request->intervalo_de_hora_de_agendamento_id){
+                $agendamento->sala_id = $request->input('sala_id');//talvez não seja input
+                $agendamento->intervalo_de_hora_de_agendamento_id = $request->input('intervalo_de_hora_de_agendamento_id');//talvez não seja input
+                $agendamento->disciplina_id = $request->input('disciplina_id');//talvez não seja input
+                $agendamento->data = $request->input('data');
+                $agendamento->save();
+                return redirect()->route('agendamentos.index', $id)->with('success', 'Agendamento atualizado com successo');
+            }
+            return redirect()->route('agendamentos.edit', compact('id'))->with('warning', 'Preencha todos os campos antes de agendar a prova!');
+        } else {
+            return redirect()->route('agendamentos.create')->with('error', 'Já há uma prova agendada para as '.$request->hora_inicial.' - '.$request->hora_final.' do dia '.$request->data.'. Tente outro horário.');
+        }
     }
     // public function update(Request $request, $id)
     // {
