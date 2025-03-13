@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
-class CreateAdminUserSeeder extends Seeder
+class CreateDiretorUserSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -17,14 +17,14 @@ class CreateAdminUserSeeder extends Seeder
     public function run(): void
     {
         $user = User::create([
-            'name' => 'Admin User',
+            'name' => 'Diretor de Ensino',
             'cpf' => '45796354000',
-            'email' => 'admin@example.com',
+            'email' => 'diretor@example.com',
             'password' => Hash::make('password'),
         ]);
         $user->markEmailAsVerified();
         // Buscar a role 'admin'
-        $role = Role::where('name', 'Admin')->first();
+        $role = Role::where('name', 'Diretor de Ensino')->first();
 
         if ($role) {
             // Atribuir todas as permissões à role
@@ -32,10 +32,10 @@ class CreateAdminUserSeeder extends Seeder
             $role->syncPermissions($permissions);
 
             // Atribuir a role ao usuário
-            $user->assignRole('Admin');
+            $user->assignRole('Diretor de Ensino');
         } else {
             // Opcional: lançar uma exceção ou exibir um aviso
-            $this->command->warn('Role "admin" não encontrada. Execute a seed das roles primeiro.');
+            $this->command->warn('Role "Diretor de Ensino" não encontrada. Execute a seed das roles primeiro.');
         }
     }
 }
