@@ -117,16 +117,23 @@
                     </ul>
                 </li>
 
-                <li class="nav-item dropdown">
-                    <a class="navbar-link dropdown-toggle" href="#" id="horaAgendamentoDropdown" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        Horários
-                    </a>
-                    <ul class="dropdown-menu p-2" aria-labelledby="horaAgendamentoDropdown">
-                        <li><a class="btn btn-primary w-100 text-start" href="{{ route('hora-agendamento.create') }}">Cadastro</a></li>
-                        <li><a class="btn btn-secondary w-100 text-start mt-1" href="{{ route('hora-agendamento.index') }}">Listagem</a></li>
-                    </ul>
-                </li>
+                @canany(['intervalo-hora-agendamento-create', 'intervalo-hora-agendamento-list'])
+                    <li class="nav-item dropdown">
+                        <a class="navbar-link dropdown-toggle" href="#" id="horaAgendamentoDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Horários
+                        </a>
+                        <ul class="dropdown-menu p-2" aria-labelledby="horaAgendamentoDropdown">
+                            @can('intervalo-hora-agendamento-create')
+                                <li><a class="btn btn-primary w-100 text-start" href="{{ route('hora-agendamento.create') }}">Cadastro</a></li>
+                            @endcan
+                            @can('intervalo-hora-agendamento-list')
+                                <li><a class="btn btn-secondary w-100 text-start mt-1" href="{{ route('hora-agendamento.index') }}">Listagem</a></li>
+                            @endcan
+                        </ul>
+                    </li>
+                    @endcanany
+
 
                 @canany(['role-list', 'user-list'])
                     <li class="nav-item dropdown">

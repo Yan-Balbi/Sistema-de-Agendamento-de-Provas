@@ -3,6 +3,7 @@
 use App\Http\Controllers\AgendamentoController;
 use Illuminate\Support\Facades\Route;
 
+// Listar agendamentos (somente quem tem permissão 'agendamento-list')
 Route::get('/agendamento/listar', [AgendamentoController::class, 'index'])
         ->name('agendamentos.index');
 
@@ -19,7 +20,7 @@ Route::middleware(['auth'])->group(function () {
         ->name('agendamentos.store')
         ->middleware('can:agendamento-create');
 
-    // Listar agendamentos (somente quem tem permissão 'agendamento-list')
+
 
     // Editar agendamento (somente quem tem permissão 'agendamento-update')
     Route::get('/agendamento/edit/{id}', [AgendamentoController::class, 'edit'])
