@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
       }
       const strongRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
       if (!strongRegex.test(password)) {
-        setError(passwordField, "Senha fraca: mínimo 8 caracteres, com letras maiúsculas, minúsculas, número e símbolo.");
+        setError(passwordField, "Senha fraca: mínimo 8 caracteres. Permitidos: letras maiúsculas (A-Z), minúsculas (a-z), números (0-9) e símbolos (@$!%*?&).");
         return false;
       }
       if (confirmationField) {
