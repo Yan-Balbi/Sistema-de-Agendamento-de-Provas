@@ -4,6 +4,7 @@ use App\Http\Controllers\SalaController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CursoController;
 use App\Http\Controllers\TurmaController;
+use App\Http\Controllers\DisciplinaController;
 use App\Http\Controllers\ProfessorController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
@@ -28,4 +29,5 @@ Route::middleware([
     Route::prefix('/')->group(base_path('routes/agendamentos.php'));
     Route::prefix('/')->group(base_path('routes/salas.php'));
     Route::prefix('/')->group(base_path('routes/professores.php'));
+    Route::prefix('/')->group(base_path('routes/disciplinas.php'));
 });
