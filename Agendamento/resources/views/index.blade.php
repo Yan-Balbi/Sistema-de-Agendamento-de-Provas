@@ -20,8 +20,12 @@
                     <h2 class="text-lg font-medium text-gray-700 mb-2">Disciplinas agendadas nesta semana:</h2>
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         @foreach ($agendamentos->unique('disciplina_id') as $index => $agendamento)
-                            <label for="disciplina-{{ $agendamento->disciplina_id }}" class="flex items-center bg-white p-2 rounded-md shadow-sm border border-gray-200 cursor-pointer">
-                                <input type="checkbox" name="disciplinas[]" value="{{ $agendamento->disciplina_id }}" id="disciplina-{{ $agendamento->disciplina_id }}" class="mr-2 h-4 w-4 text-green-600 border-gray-300 rounded focus:ring-green-500">
+                            @php
+                                $colors = ['bg-blue-200', 'bg-red-200', 'bg-yellow-200', 'bg-green-200', 'bg-purple-200', 'bg-pink-200', 'bg-indigo-200'];
+                                $color = $colors[$agendamento->disciplina_id % count($colors)];
+                            @endphp
+                            <label for="disciplina-{{ $agendamento->disciplina_id }}" class="flex items-center bg-white p-2 rounded-md shadow-sm border border-gray-200 cursor-pointer {{ in_array($agendamento->disciplina_id, request('disciplinas', [])) ? $color : '' }}">
+                                <input type="checkbox" name="disciplinas[]" value="{{ $agendamento->disciplina_id }}" id="disciplina-{{ $agendamento->disciplina_id }}" class="mr-2 h-4 w-4 text-green-600 border-gray-300 rounded focus:ring-green-500" {{ in_array($agendamento->disciplina_id, request('disciplinas', [])) ? 'checked' : '' }} onchange="this.parentElement.classList.toggle('{{ $color }}', this.checked)">
                                 <span class="text-gray-700">{{ $agendamento->disciplina->nome }}</span>
                             </label>
                         @endforeach
@@ -47,7 +51,9 @@
                     <tbody class="bg-white divide-y divide-gray-200">
                         @foreach ($horarios as $horario)
                             <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-base font-medium text-white border" style="background-color: #046b1c;">{{ $horario['hora_inicial'] }} - {{ $horario['hora_final'] }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-base font-medium text-white border" style="background-color: #046b1c;">
+                                    {{ \Carbon\Carbon::parse($horario['hora_inicial'])->format('H:i') }} - {{ \Carbon\Carbon::parse($horario['hora_final'])->format('H:i') }}
+                                </td>
                                 @for ($i = 0; $i < 7; $i++)
                                     <td class="px-6 py-4 whitespace-nowrap border text-base">
                                         @foreach ($agendamentos->where('data', $dataInicial->copy()->addDays($i)->toDateString())->where('intervaloDeHora.hora_inicial', $horario['hora_inicial']) as $agendamento)
