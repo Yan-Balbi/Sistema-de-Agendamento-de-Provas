@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function () {
         setError(passwordField, "A senha é obrigatória.");
         return false;
       }
-      const strongRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+      const strongRegex = /^(?=.*[a-zç])(?=.*[A-ZÇ])(?=.*\d)(?=.*[@$!%*?&])[A-Za-zçÇ\d@$!%*?&]{8,}$/;
       if (!strongRegex.test(password)) {
         setError(passwordField, "Senha fraca: mínimo 8 caracteres. Permitidos: letras maiúsculas (A-Z), minúsculas (a-z), números (0-9) e símbolos (@$!%*?&).");
         return false;
