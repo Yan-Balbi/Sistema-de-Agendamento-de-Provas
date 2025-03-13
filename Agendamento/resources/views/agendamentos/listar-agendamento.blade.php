@@ -27,6 +27,8 @@
             <thead>
                 <tr class="text-left text-gray-500 uppercase text-sm">
                     <th class="p-3">Agendamento</th>
+                    <th class="p-3">Data</th>
+                    <th class="p-3">Sala</th>
                     <th class="p-3">Ação</th>
                 </tr>
             </thead>
@@ -34,7 +36,9 @@
                 @foreach ($agendamentos as $agendamento)
                 <tr class="bg-white border-b hover:bg-gray-100 transition">
 
-                    <td class="p-3 text-green-600 min-w-[600px]">Avalização de {{  $agendamento->disciplina->nome  }} - {{ $agendamento->data }}</td>
+                    <td class="p-3 text-green-600 min-w-[10px]">Avaliação de {{  $agendamento->disciplina->nome  }} </td>
+                    <td class="p-3 text-green-600 min-w-[10px]"> {{ $agendamento->data }} </td>
+                    <td class="p-3 text-green-600 min-w-[10px]"> {{ $agendamento->sala->nome }} </td>
                     <td class="p-3">
                         <div class="div-botoes">
                             <button class="btn visualizar" data-id="{{ $agendamento->id }}" onclick="getById(this)"> Visualizar </button>

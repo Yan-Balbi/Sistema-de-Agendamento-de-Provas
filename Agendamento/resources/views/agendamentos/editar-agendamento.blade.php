@@ -135,12 +135,13 @@
             });
 
             // Preencher ComboBox de Salas
-            let salaSelecionadaId = "{{ $intervaloDeHora->id }}";
+            let salaSelecionadaId = "{{ $salaSelecionada->id }}";
             $.get('/agendamento/index-salas', function (data) {
                 data.forEach(sala => {
                     let option = new Option(sala.nome, sala.id);
                     $('#sala').append(option);
                     if(sala.id == salaSelecionadaId){
+                        console.log(sala.id);
                         $(option).prop('selected',true);
                     }
                 });

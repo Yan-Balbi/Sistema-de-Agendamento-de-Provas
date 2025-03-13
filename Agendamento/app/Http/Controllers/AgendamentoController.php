@@ -178,11 +178,13 @@ class AgendamentoController extends Controller
     }
 
     private function verificarDisponibilidadeDeSalaEmUmHorariodeUmDia(Request $request){
-        $contagem = DB::select('SELECT COUNT(*) as contagem_agendamento_repetido
+        $resultado = DB::select('SELECT COUNT(*) as contagem_agendamento_repetido
             FROM agendamentos
             WHERE sala_id = ? and intervalo_de_hora_de_agendamento_id = ? and data = ?;',
         [$request->sala_id, $request->intervalo_de_hora_de_agendamento_id, $request->data]);
 
+        $contagem = $resultado[0]->contagem_agendamento_repetido ?? 0;
+        dump($contagem);
         if($contagem == 0){
             return true;
         }
