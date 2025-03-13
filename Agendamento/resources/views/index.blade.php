@@ -14,7 +14,8 @@
         @if($agendamentos->isEmpty())
             <p class="text-gray-500">Não há provas agendadas para a semana selecionada.</p>
         @else
-            <form method="GET" action="{{ route('home') }}">
+            <button id="toggleDisciplinas" class="mb-4 inline-flex items-center px-4 py-2 border border-transparent text-lg font-medium rounded-md text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Selecionar Disciplinas</button>
+            <form method="GET" action="{{ route('home') }}" id="disciplinasForm" class="hidden transition-all duration-500 ease-in-out max-h-0 overflow-hidden">
                 <div class="mb-4">
                     <h2 class="text-lg font-medium text-gray-700">Selecione as disciplinas:</h2>
                     @foreach ($agendamentos->unique('disciplina_id') as $agendamento)
@@ -29,7 +30,7 @@
 
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-green-600">
+                    <thead style="background-color: #034811;">
                         <tr>
                             <th class="px-6 py-3 text-left text-sm font-medium text-white uppercase tracking-wider whitespace-nowrap">Horário</th>
                             <th class="px-6 py-3 text-left text-sm font-medium text-white uppercase tracking-wider whitespace-nowrap">Segunda-feira</th>
@@ -44,7 +45,7 @@
                     <tbody class="bg-white divide-y divide-gray-200">
                         @foreach ($horarios as $horario)
                             <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-base font-medium text-gray-900 border bg-green-400">{{ $horario['hora_inicial'] }} - {{ $horario['hora_final'] }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-base font-medium text-white border" style="background-color:rgb(44, 139, 66);">{{ $horario['hora_inicial'] }} - {{ $horario['hora_final'] }}</td>
                                 @for ($i = 0; $i < 7; $i++)
                                     <td class="px-6 py-4 whitespace-nowrap border text-base">
                                         @foreach ($agendamentos->where('data', $dataInicial->copy()->addDays($i)->toDateString())->where('intervaloDeHora.hora_inicial', $horario['hora_inicial']) as $agendamento)
@@ -68,4 +69,19 @@
             </div>
         @endif
     </div>
+
+    <script>
+        document.getElementById('toggleDisciplinas').addEventListener('click', function() {
+            var form = document.getElementById('disciplinasForm');
+            if (form.classList.contains('hidden')) {
+                form.classList.remove('hidden');
+                form.style.maxHeight = form.scrollHeight + "px";
+            } else {
+                form.style.maxHeight = "0";
+                form.addEventListener('transitionend', function() {
+                    form.classList.add('hidden');
+                }, { once: true });
+            }
+        });
+    </script>
 @endsection
