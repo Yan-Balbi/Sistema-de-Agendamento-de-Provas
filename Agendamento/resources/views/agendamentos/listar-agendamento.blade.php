@@ -16,10 +16,10 @@
 </head>
 <div class="bg-gray-100 p-6">
     @if(session('success'))
-        <p style="color: green;">{{ session('success') }}</p>
+    <p style="color: green;">{{ session('success') }}</p>
     @endif
     @if(session('danger'))
-        <p class="bg-red-100 border-l-4 border-red-500 text-black-700 p-4 mb-4 rounded-lg">{{ session('danger') }}</p>
+    <p class="bg-red-100 border-l-4 border-red-500 text-black-700 p-4 mb-4 rounded-lg">{{ session('danger') }}</p>
     @endif
     <div class="max-w-5xl mx-auto bg-white shadow-md rounded-lg p-6 mt-5">
         <h2 class="text-xl font-semibold text-gray-800 mb-4">Lista de Agendamentos</h2>
@@ -29,25 +29,30 @@
                     <th class="p-3">Agendamento</th>
                     <th class="p-3">Data</th>
                     <th class="p-3">Sala</th>
+                    @canany(['agendamento-delete', 'agendamento-read'])
                     <th class="p-3">Ação</th>
+                    @endcanany
                 </tr>
             </thead>
             <tbody>
                 @foreach ($agendamentos as $agendamento)
                 <tr class="bg-white border-b hover:bg-gray-100 transition">
 
-                    <td class="p-3 text-green-600 min-w-[10px]">Avaliação de {{  $agendamento->disciplina->nome  }} </td>
+                    <td class="p-3 text-green-600 min-w-[10px]">Avaliação de {{ $agendamento->disciplina->nome  }} </td>
                     <td class="p-3 text-green-600 min-w-[10px]"> {{ $agendamento->data }} </td>
                     <td class="p-3 text-green-600 min-w-[10px]"> {{ $agendamento->sala->nome }} </td>
                     <td class="p-3">
                         <div class="div-botoes">
+                            @can('agendamento-read')
                             <button class="btn visualizar" data-id="{{ $agendamento->id }}" onclick="getById(this)"> Visualizar </button>
-
+                            @endcan
+                            @can('agendamento-delete')
                             <form method="POST" action="{{ route('agendamento.destroy', $agendamento->id) }}">
                                 @csrf
                                 @method('DELETE')
                                 <button class="btn apagar" type="submit"> Apagar </button>
                             </form>
+                            @endcan
                         </div>
                     </td>
 
@@ -57,12 +62,12 @@
         </table>
     </div>
 
-<tbody>
-    <nav>
-        <ul class="pagination pagination-sm">
-            {{ $agendamentos->links() }}
-        </ul>
-    </nav>
-</tbody>
-@endsection
+    <tbody>
+        <nav>
+            <ul class="pagination pagination-sm">
+                {{ $agendamentos->links() }}
+            </ul>
+        </nav>
+    </tbody>
+    @endsection
 </div>
