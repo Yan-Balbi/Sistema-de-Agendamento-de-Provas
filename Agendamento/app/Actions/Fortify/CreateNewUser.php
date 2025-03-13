@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Rules\CpfValidation;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Rule;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 use Laravel\Jetstream\Jetstream;
@@ -21,6 +22,15 @@ class CreateNewUser implements CreatesNewUsers
      */
     public function create(array $input): User
     {
+        $cpfCnpj = preg_replace('/\D/', '', $input['cpf']);
+
+        // Valida se o CPF já existe no banco antes de tentar salvar
+        if (User::where('cpf', $cpfCnpj)->exists()) {
+            throw ValidationException::withMessages([
+                'cpf' => 'Este CPF já está registrado.',
+            ]);
+        }
+
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
             'cpf' => ['required', 'string', 'max:18', 'unique:users', new CpfValidation()],
