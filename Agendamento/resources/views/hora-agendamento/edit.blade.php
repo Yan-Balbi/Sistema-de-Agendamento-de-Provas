@@ -5,7 +5,7 @@
     <div class="max-w-2xl mx-auto bg-white shadow-md rounded-lg p-6 mt-10">
         <h1 class="text-xl font-semibold text-gray-800 mb-4">Editar Horário de Agendamento</h1>
 
-        <form action="{{ route('horaAgendamento.update', $horario->id) }}" method="POST" class="space-y-5">
+        <form action="{{ route('hora-agendamento.update', $horario->id) }}" method="POST" class="space-y-5">
             @csrf
             @method('PUT')
 
@@ -21,7 +21,7 @@
 
             <div class="flex space-x-4">
                 <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition">Salvar Alterações</button>
-                <a href="{{ route('horaAgendamento.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition">Cancelar</a>
+                <a href="{{ route('hora-agendamento.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition">Cancelar</a>
             </div>
         </form>
     </div>
