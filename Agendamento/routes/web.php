@@ -30,4 +30,5 @@ Route::middleware([
     Route::prefix('/')->group(base_path('routes/salas.php'));
     Route::prefix('/')->group(base_path('routes/professores.php'));
     Route::prefix('/')->group(base_path('routes/disciplinas.php'));
+    Route::prefix('/')->group(base_path('routes/horaAgendamento.php'));
 });
