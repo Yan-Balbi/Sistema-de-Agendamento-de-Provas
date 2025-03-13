@@ -19,7 +19,8 @@
     @endif
     <div class="max-w-2xl mx-auto bg-white shadow-md rounded-lg p-6 mt-10">
         <h2 class="text-2xl font-semibold text-gray-800 ">Agendamento de Horários</h2>
-
+        <form action="{{ route('hora-agendamento.store') }}" method="POST" class="mt-4">
+            @csrf
             <!-- Horário Inicial -->
             <label for="horario_inicial">Horário Inicial:</label>
             <input type="time" id="horario_inicial" name="hora_inicial" class="bg-gray-100 border border-gray-200 text-gray-800 text-sm rounded-lg focus:ring-blue-500 focus:border-green-500 block w-full p-2.5">
@@ -33,71 +34,31 @@
             <button type="submit" class="btn cadastrar">Cadastrar</button>
         </form>
     </div>
-
     <script>
         $(document).ready(function () {
-            // Preencher ComboBox de Cursos
-            $.get('/agendamento/index-cursos', function (data) {
-                data.forEach(curso => {
-                    $('#curso').append(new Option(curso.nome, curso.id));
+            // Preencher ComboBox de Horarios
+            let horariosData = [];  // Variável para armazenar os dados de horários
+
+            // Preencher ComboBox de Horarios
+            $.get('/hora-agendamento/index-horarios', function (data) {
+                data.forEach(horario => {
+                    $('#horario').append(new Option(horario.hora_inicial + ' - ' + horario.hora_final, horario.id));
                 });
+                horariosData = data;  // Armazenar os dados de horários na variável global
+                $('#horario').prop('disabled', false);
             });
 
-            // Quando selecionar um curso, carregar as turmas
-            $('#curso').change(function () {
-                let cursoId = $(this).val();
-                $('#turma').html('<option value="">Selecione uma turma</option>').prop('disabled', cursoId === "");
-                $('#professor').html('<option value="">Selecione um professor</option>').prop('disabled', true);
-                $('#disciplina').html('<option value="">Selecione uma disciplina</option>').prop('disabled', true);
+            // Quando selecionar um horário, preencher os campos ocultos
+            $('#horario').change(function () {
+                let horarioId = $(this).val();
+                let selectedHorario = horariosData.find(h => h.id == horarioId);  // Encontra o objeto correspondente ao horário selecionado
 
-                if (cursoId) {
-                    $.get('/agendamento/index-turmas', { cursoId: cursoId }, function (data) {
-                        data.forEach(turma => {
-                            $('#turma').append(new Option(turma.nome, turma.id));
-                        });
-                    });
+                if (selectedHorario) {
+                    // Preencher os campos ocultos com os horários selecionados
+                    $('#horario_inicial').val(selectedHorario.hora_inicial);
+                    $('#horario_final').val(selectedHorario.hora_final);
                 }
-            });
-
-            // Quando selecionar uma turma, carregar os professores
-            $('#turma').change(function () {
-                let turmaId = $(this).val();
-                $('#professor').html('<option value="">Selecione um professor</option>').prop('disabled', turmaId === "");
-                $('#disciplina').html('<option value="">Selecione uma disciplina</option>').prop('disabled', true);
-
-                if (turmaId) {
-                    $.get('/agendamento/index-professores', { turmaId: turmaId }, function (data) {
-                        data.forEach(professor => {
-                            $('#professor').append(new Option(professor.nome, professor.id));
-                        });
-                    });
-                }
-            });
-
-            // Quando selecionar um professor, carregar as disciplinas
-            $('#professor').change(function () {
-                let professorId = $(this).val();
-                let turmaId = $('#turma').val();
-                $('#disciplina').html('<option value="">Selecione uma disciplina</option>').prop('disabled', professorId === "");
-
-                if (professorId && turmaId) {
-                    $.get('/agendamento/index-disciplinas', { professorId: professorId, turmaId: turmaId }, function (data) {
-                        data.forEach(disciplina => {
-                            $('#disciplina').append(new Option(disciplina.nome, disciplina.id));
-                        });
-                    });
-                    $('#disciplina').prop('disabled', false);
-                }
-            });
-
-            // Preencher ComboBox de Salas
-            $.get('/agendamento/index-salas', function (data) {
-                data.forEach(sala => {
-                    $('#sala').append(new Option(sala.nome, sala.id));
-                });
-                $('#sala').prop('disabled', false);
             });
         });
     </script>
-</div>
 @endsection

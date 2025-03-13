@@ -38,6 +38,7 @@ class HoraAgendamentoController extends Controller
      */
     public function store(Request $request)
     {
+        
         $request->validate([
             'hora_inicial' => 'required|date_format:H:i',
             'hora_final' => 'required|date_format:H:i|after:hora_inicial',
