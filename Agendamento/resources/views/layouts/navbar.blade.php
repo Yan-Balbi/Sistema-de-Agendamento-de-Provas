@@ -146,17 +146,17 @@
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit" class="btn-login">
-                            Logout
+                            Sair
                         </button>
                     </form>
                 @else
                     <a href="{{ route('login') }}" class="btn-login">
-                        Log in
+                        Entrar
                     </a>
 
                     @if (Route::has('register'))
                         <a href="{{ route('register') }}" class="btn-login">
-                            Register
+                            Cadastrar-se
                         </a>
                     @endif
                 @endauth
