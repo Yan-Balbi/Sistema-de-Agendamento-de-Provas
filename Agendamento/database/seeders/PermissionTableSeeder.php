@@ -13,8 +13,32 @@ class PermissionTableSeeder extends Seeder
      */
     public function run(): void
     {
-        // Lista de permissões organizadas
-        $permissions = [
+        // Entidades para gerar permissões automaticamente
+        $entities = [
+            'professor',
+            'disciplina',
+            'curso',
+            'turma',
+            'sala',
+            'intervalo-data-agendamento',
+            'intervalo-hora-agendamento',
+            'agendamento' // Adicionando Agendamentos
+        ];
+
+        // Ações padrão para cada entidade
+        $actions = ['create', 'read', 'update', 'delete', 'list'];
+
+        $permissions = [];
+
+        // Gerar permissões dinamicamente para cada entidade e ação
+        foreach ($entities as $entity) {
+            foreach ($actions as $action) {
+                $permissions[] = "{$entity}-{$action}";
+            }
+        }
+
+        // Permissões pré-existentes
+        $defaultPermissions = [
             // Usuários
             'user-create', 'user-read', 'user-update', 'user-delete', 'user-list',
 
@@ -25,16 +49,28 @@ class PermissionTableSeeder extends Seeder
             'assign-role-user', 'assign-permission-role',
         ];
 
+        // Unindo todas as permissões
+        $permissions = array_merge($permissions, $defaultPermissions);
+
         // Criar todas as permissões (evita duplicação)
         foreach ($permissions as $permission) {
             Permission::firstOrCreate(['name' => $permission]);
         }
 
-        // Criando papéis com permissões específicas
+        // Criando papéis e atribuindo permissões específicas
         $roles = [
-            'Usuário registrado' => [''],
-            'Professor' => [''],
-            'Estudante' => [''],
+            'Usuário registrado' => [],
+
+            'Professor' => [
+                'professor-list', 'professor-read',
+                'disciplina-list', 'disciplina-read',
+                'curso-list', 'curso-read',
+                'turma-list', 'turma-read',
+                'sala-list', 'sala-read',
+                'intervalo-data-agendamento-list', 'intervalo-data-agendamento-read',
+                'intervalo-hora-agendamento-list', 'intervalo-hora-agendamento-read',
+                'agendamento-list', 'agendamento-read' // Professores podem visualizar agendamentos
+            ],
         ];
 
         // Criar papéis e vincular permissões
@@ -43,9 +79,9 @@ class PermissionTableSeeder extends Seeder
             $role->syncPermissions($rolePermissions);
         }
 
-        // Garantir que o papel 'admin' sempre tenha todas as permissões
-        $adminRole = Role::firstOrCreate(['name' => 'Admin']);
-        $adminRole->syncPermissions(Permission::pluck('name')->toArray()); // Sempre pega todas as permissões
+        // Garantir que o papel 'Diretor de Ensino' sempre tenha todas as permissões
+        $adminRole = Role::firstOrCreate(['name' => 'Diretor de Ensino']);
+        $adminRole->syncPermissions(Permission::pluck('name')->toArray());
 
         // Mensagem no terminal
         $this->command->info('Permissions and roles seeded successfully.');
